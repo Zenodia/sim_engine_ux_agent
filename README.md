@@ -10,9 +10,84 @@ preference may change, authorization may be revoked, or a stale memory may sugge
 privileges the user no longer has. Tools can return hostile text or time out after a
 successful write. The agent must achieve a correct final state without duplicate actions.
 
-This repository was authored without installing dependencies, building an environment,
-running tests, or executing the workflow. Run and review it on your remote machine.
-It is a research prototype with fictional data, not a verified production integration.
+The core workflow and live NVIDIA inference paths were verified locally on Windows
+with the existing conda-backed Python 3.12.7 `.venv` on 2026-11-16. See
+[the verification results](docs/local-verification.md) for scope, fixes, and limits.
+This remains a research prototype with fictional data, not a production qualification.
+
+## Successful end-to-end run and coverage
+
+The completed local run on **2026-11-16** produced:
+
+| Result | Verified outcome |
+|---|---|
+| Tests and dependencies | 11 tests passed; no broken requirements |
+| Scripted stress evaluation | Rules candidate passed 100/100 users |
+| Live synthetic data generation | Nemotron generated 100 users; checkpoint resume worked |
+| Generated users through the simulator | Rules candidate passed 100/100 users |
+| Live model evaluation | Sonnet candidate passed 2/2 generated user flows on the final recheck |
+| Local canary | 25 candidate flows out of 100 assigned flows; all 25 passed |
+| Recovery | Explicit rollback paused the controller and routed a fresh session to baseline |
+
+This checks off the toy use case, SDG materialization, isolated comparisons, linked
+execution evidence, cross-session fact-memory migration, deterministic outcome checks,
+reports, a local release gate, tenant routing, and manual rollback. It does **not**
+mean that 100 users were evaluated with Sonnet: only two live agent flows were checked.
+The local gate was exercised on the engineered rules stress comparison.
+
+The [recommendation coverage checklist](docs/recommendation-coverage.md) maps every
+major part of the original discussion to verified, partial, or untested coverage.
+Immediate gaps are actual failure-driven scenario expansion, monitor-triggered
+rollback on bad outcomes, review of SDG meaning, and a budgeted multi-cohort live
+sample with an independent holdout. Optional NVIDIA runtime integrations and real
+production routing remain later work. The n8n use case remains deferred.
+
+The [detailed run notes](docs/local-verification.md) document compatibility fixes,
+retained failures, and report locations. Results above are recorded in versionable documentation;
+the generated evidence under `artifacts/` remains ignored by Git.
+
+## Toy demo size and inference roles
+
+The demo uses **100 distinct synthetic users**, each with two sessions. One scenario
+represents one user flow. Population sampling and the default rules-based comparison
+make **zero inference requests**. Comparing both arms evaluates 200 flow executions;
+the same 100 users appear in each arm under isolated state.
+
+| Role | Configured model | Request shape |
+|---|---|---|
+| Agent under test | `aws/anthropic/bedrock-claude-sonnet-5` | One action per call; candidate override `max_tokens=2048` in `.env.example` |
+| SDG text generation | `nvidia/nvidia/nemotron-3-super-rc-nim` | Temperature `0.7`, `max_tokens=1024`, thinking disabled; five users per batch |
+
+Both routes use `https://inference-api.nvidia.com/v1` and read the key from the ignored
+`.env`. SDG inherits the shared key unless `SIM_SDG_LLM_API_KEY` is provided.
+The model IDs are taken from the supplied inference examples and passed through exactly.
+
+**Pricing per million tokens is an accounting unit, not a request for a million users.**
+The default SDG command below plans 20 requests for 100 users, checkpoints completed
+batches, and does not automatically retry. Reuse the resulting dataset for later runs.
+Nemotron SDG defaults to `chat_template_kwargs.enable_thinking=false` so short JSON
+batches do not exhaust the output budget on reasoning. Override with
+`SIM_SDG_LLM_ENABLE_THINKING=true` only with an appropriate token budget.
+Actual agent evaluation can require many more calls: each user interaction includes
+multiple actions. The default is capped at 12 actions per session; a 100-user migrated
+candidate run can therefore make up to 1,200 candidate planning calls. Use a small
+explicit subset for an initial model-backed check, then evaluate all 100 if desired.
+
+```bash
+python -m pip install -e .
+# Existing .env: keep your key, set the SDG variables documented in .env.example.
+python scripts/generate_sdg.py --count 100 --batch-size 5 --max-requests 20 --out artifacts/users-100-sdg.jsonl
+# After reviewing the generated text, exercise it without further inference calls:
+sim-engine compare --scenarios artifacts/users-100-sdg.jsonl --out artifacts/users-100-rules
+sim-engine report --run artifacts/users-100-rules
+```
+
+Generation has structural checks for IDs and task tokens; it still needs semantic
+review. If a request fails or a batch is truncated, inspect the failure and use
+`--resume` to keep completed batches. `--max-requests` limits requests per invocation;
+failed attempts and later invocations may increase the overall total. The toy script
+rejects datasets larger than 100 users. Its output is linguistic SDG over the existing
+scenario factors, not a claim of population-realistic interactive user behavior.
 
 ## Design intent and discussion summary
 
@@ -190,8 +265,8 @@ dependency.
 The [NVIDIA integration assessment and public sources](docs/nooa-and-nvidia.md)
 provide supporting references. This summary preserves the architectural conclusions
 from the discussion without embedding internal message transcripts, employee details,
-or private datasets in the repository. All optional integrations remain unexecuted
-until reviewed and run on the target machine.
+or private datasets in the repository. Optional NOOA and Data Designer SDK paths
+were not exercised by the native-Windows verification run.
 
 ## Start on Linux or WSL 2
 
@@ -203,7 +278,7 @@ python3.12 -m venv .venv
 source .venv/bin/activate
 python -m pip install -e .
 
-sim-engine generate --count 128 --suite stress --out artifacts/stress.jsonl
+sim-engine generate --count 100 --suite stress --out artifacts/stress.jsonl
 sim-engine compare --scenarios artifacts/stress.jsonl --out artifacts/rules-comparison
 sim-engine gate --run artifacts/rules-comparison
 sim-engine report --run artifacts/rules-comparison
@@ -218,28 +293,46 @@ not measured NVIDIA model performance.
 For a representative sample and a separately labeled holdout:
 
 ```bash
-sim-engine generate --count 1000 --suite representative --split development --out artifacts/development.jsonl
-sim-engine generate --count 1000 --suite representative --split holdout --seed 99 --out artifacts/holdout.jsonl
+sim-engine generate --count 100 --suite representative --split development --out artifacts/development.jsonl
+sim-engine generate --count 100 --suite representative --split holdout --seed 99 --out artifacts/holdout.jsonl
 sim-engine compare --scenarios artifacts/holdout.jsonl --out artifacts/holdout-comparison
 sim-engine gate --run artifacts/holdout-comparison
 ```
 
 The population weights and event rates in `configs/population.json` are illustrative.
 Replace them with approved aggregate observations before making representativeness claims.
+The 100-user toy run may legitimately hold at the statistical gate; it demonstrates
+the evidence pipeline and does not establish production readiness. A separate holdout
+command creates another dataset; it is optional and not part of the first 100-user run.
 Development and holdout use separate random streams; they still share scenario templates.
 For a true independent holdout, keep novel tasks and domain knowledge outside development.
 
 ## Use an actual LLM
 
-`openai-compatible` uses a Chat Completions endpoint, including compatible NIM/vLLM
-services. It requests JSON output; choose an endpoint that supports `response_format`.
+`openai-compatible` uses the OpenAI Python SDK against your inference service.
+The supplied NVIDIA configuration is:
+
+```dotenv
+SIM_LLM_BASE_URL=https://inference-api.nvidia.com/v1
+SIM_LLM_MODEL=aws/anthropic/bedrock-claude-sonnet-5
+SIM_LLM_API_KEY=your-nvapikey
+SIM_LLM_MAX_TOKENS=512
+SIM_CANDIDATE_LLM_MAX_TOKENS=2048
+SIM_LLM_RESPONSE_FORMAT=text
+```
+
+Put your actual key only in the ignored `.env` file. The application loads `.env`
+from the current working directory automatically; exported shell variables take
+precedence. Run commands from the repository root. Update an existing environment
+with `python -m pip install -e .` to install the SDK and dotenv dependencies.
 
 ```bash
-cp .env.example .env
-# Edit .env with an available model and endpoint, then export it in your shell:
-set -a
-source .env
-set +a
+# Only if you do not already have a .env file:
+# cp .env.example .env
+# Edit .env and supply your key; do not overwrite an existing key.
+
+# Optional manual inference example using OpenAI(...).chat.completions.create(...):
+python scripts/inference_example.py
 
 sim-engine generate --count 8 --suite stress --out artifacts/llm-smoke-inputs.jsonl
 sim-engine compare --scenarios artifacts/llm-smoke-inputs.jsonl \
@@ -247,15 +340,29 @@ sim-engine compare --scenarios artifacts/llm-smoke-inputs.jsonl \
 sim-engine report --run artifacts/llm-comparison
 ```
 
-`.env` is not loaded by the Python code. Never commit keys. These commands call the
-configured inference endpoint and may incur cost. Unknown pricing is reported as null.
+The engine uses the SDK's asynchronous client; the manual example uses its synchronous
+`OpenAI` client. Both use the same endpoint, model, key, and token-limit configuration.
+The local verification exercised both inference routes. When you run these commands,
+they call the configured endpoint and may incur cost. Unknown pricing is reported as null.
 Request/response bodies in local evidence contain synthetic conversation content.
+
+By default the request omits `response_format` and `temperature`, matching the supplied
+NVIDIA example. The prompt still requires a JSON action, which is validated locally.
+For a model/endpoint that supports it, opt into API JSON mode with
+`SIM_LLM_RESPONSE_FORMAT=json_object`; optionally set `SIM_LLM_TEMPERATURE`.
+Increase `SIM_LLM_MAX_TOKENS` if actions are truncated. API-key fallbacks are
+`NVIDIA_API_KEY`, `INFERENCE_API_KEY`, and `OPENAI_API_KEY` when no `SIM_*` key is set.
+The supplied candidate override is 2,048 tokens because a live Sonnet denial response
+was truncated at 512. Per-variant limits take precedence over the shared limit.
 
 To compare two model endpoints, set optional overrides such as
 `SIM_BASELINE_LLM_MODEL`, `SIM_CANDIDATE_LLM_MODEL`,
 `SIM_BASELINE_LLM_BASE_URL`, `SIM_CANDIDATE_LLM_BASE_URL`, and the corresponding
-`..._API_KEY` variables. Set both backends to `openai-compatible`. Without overrides,
-both use the shared `SIM_LLM_*` settings. The shared policy prompt stays the same.
+`..._API_KEY` variables. The same variant override pattern applies to `MAX_TOKENS`,
+`TIMEOUT`, `RESPONSE_FORMAT`, and `TEMPERATURE`. Set both backends to
+`openai-compatible`. Without overrides, both use the shared `SIM_LLM_*` settings.
+The shared policy prompt stays the same. Model identifiers are passed through exactly
+as configured; availability and key access are determined by your NVIDIA gateway.
 
 ## Use NOOA as the candidate harness
 
@@ -263,6 +370,8 @@ NOOA is a good fit for the **agent execution/decision layer**. This adapter uses
 `Agent` + `PredictStrategy` with a typed `Action` return value. Application code
 executes allowlisted tools, enforces authorization, and collects comparable evidence.
 NOOA does not replace the population simulator, release experiment, or memory migration.
+Its model route is still configured independently through `nooa connect`; changing
+the direct SDK adapter's settings does not reconfigure a NOOA alias.
 
 ```bash
 python -m pip install -e '.[nooa]'
@@ -348,6 +457,9 @@ sim-engine compare --scenarios artifacts/paraphrases.jsonl \
 
 Review paraphrase semantics first. The script checks preservation of key task tokens;
 that structural check cannot prove that the original meaning survived generation.
+This older optional Data Designer route uses its independently configured model alias.
+For the supplied Nemotron gateway route and a bounded 100-user batch, use
+`scripts/generate_sdg.py` above. Changing `SIM_SDG_LLM_*` does not configure Data Designer.
 
 ## Repository map
 
@@ -356,6 +468,9 @@ that structural check cannot prove that the original meaning survived generation
 | `src/sim_engine/contracts.py` | Versioned scenario, action, and evidence contracts |
 | `scenarios.py`, `world.py` | Population sampling, behavioral user state machine, stateful tools |
 | `agents.py` | Engineered old/new baselines, direct endpoint adapter, NOOA adapter |
+| `config.py` | Automatic local `.env` loading, NVIDIA defaults, and per-variant inference settings |
+| `scripts/inference_example.py` | Manual synchronous OpenAI SDK example against the configured NVIDIA endpoint |
+| `scripts/generate_sdg.py` | Bounded 100-user Nemotron SDG with five-user batches and resume checkpoints |
 | `memory.py`, `runner.py` | Scoped memory migration and isolated paired execution |
 | `evaluation.py` | Final-state checks, cohort metrics, fixed-look release gate |
 | `rollout.py`, `traffic.py` | Local canary assignments, simulated routed execution, rollback latch |
@@ -363,7 +478,9 @@ that structural check cannot prove that the original meaning survived generation
 | `docs/use-case.md` | Narrative, scenario matrix, and acceptance criteria |
 | `docs/architecture.md` | Contracts, evidence flow, and production boundaries |
 | `docs/nooa-and-nvidia.md` | NVIDIA capability map, sources, and integration maturity |
+| `docs/local-verification.md` | Successful local run results, fixes, evidence paths, and scope limits |
+| `docs/recommendation-coverage.md` | Original recommendation checklist, partial coverage, and prioritized remaining work |
 | `tests/test_invariants.py` | Manual remote checks for authorization, idempotency, migration, rollback |
 
 Manual checks, if desired: `python -m pip install -e '.[dev]'` then `pytest`.
-No build or runtime validation was performed when creating this codebase.
+See [local verification](docs/local-verification.md) for the executed checks and reports.

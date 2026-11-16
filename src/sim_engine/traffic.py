@@ -22,7 +22,7 @@ async def replay_traffic(scenarios: list[Scenario], root: Path, db: Path, candid
                 continue
             variant = assignment["arm"]
             backend = candidate_backend if variant == "candidate" else "rules"
-            result = await episode(scenario, variant, backend, root, run_id, "migrated", 24, 600)
+            result = await episode(scenario, variant, backend, root, run_id, "migrated", 12, 600)
             results.append(result)
             with (root / "outcomes.jsonl").open("a", encoding="utf-8") as stream:
                 stream.write(result.model_dump_json() + "\n")

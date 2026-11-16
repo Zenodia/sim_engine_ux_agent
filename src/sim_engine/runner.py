@@ -9,6 +9,7 @@ from pathlib import Path
 from . import __version__
 from .agents import NooaBackend, OpenAICompatible, run_llm, run_rules
 from .contracts import Outcome, Scenario
+from .config import llm_settings, load_environment
 from .evaluation import summarize, verify
 from .evidence import Journal, digest, dump
 from .memory import Memory
@@ -97,6 +98,10 @@ async def episode(scenario: Scenario, variant: str, backend_name: str, root: Pat
 async def compare(scenarios: list[Scenario], output: Path, baseline_backend: str,
                   candidate_backend: str, migration_mode: str, max_steps: int,
                   episode_timeout: float) -> list[Outcome]:
+    load_environment()
+    inference = {variant: llm_settings(variant).public_metadata()
+                 for variant, name in (("baseline", baseline_backend), ("candidate", candidate_backend))
+                 if name == "openai-compatible"}
     # New output per run avoids mixing retries with independent observations.
     output.mkdir(parents=True, exist_ok=False)
     run_id = str(uuid.uuid4())
@@ -110,6 +115,7 @@ async def compare(scenarios: list[Scenario], output: Path, baseline_backend: str
         "model": os.getenv("SIM_LLM_MODEL"), "nooa_alias": os.getenv("SIM_NOOA_MODEL"),
         "variant_models": {v: os.getenv(f"SIM_{v.upper()}_LLM_MODEL") for v in ("baseline", "candidate")},
         "variant_nooa_aliases": {v: os.getenv(f"SIM_{v.upper()}_NOOA_MODEL") for v in ("baseline", "candidate")},
+        "inference": inference,
         "usage_note": "NOOA usage remains in its native journal and is not aggregated here.",
     })
     outcomes = []

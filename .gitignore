@@ -1,8 +1,52 @@
+# Local secrets and endpoint configuration (keep templates trackable)
+.env
+.env.*
+!.env.example
+!.env.template
+
+# Virtual environments
 .venv/
+.venv-*/
+venv/
+env/
+ENV/
+
+# Generated simulation evidence, including JSON/JSONL, traces, reports and SQLite
+/artifact/
+/artifacts/
+
+# Python bytecode, tool caches and notebook checkpoints
 __pycache__/
 *.py[cod]
 .pytest_cache/
-.env
-artifacts/
+.mypy_cache/
+.ruff_cache/
+.pytype/
+.hypothesis/
+.tox/
+.nox/
+.ipynb_checkpoints/
+
+# Packaging and coverage output
+/build/
+/dist/
 *.egg-info/
+.eggs/
+.coverage
+.coverage.*
+coverage.xml
+htmlcov/
+
+# Local logs, temporary files and editor/OS metadata
+*.log
+*.tmp
+*.swp
+*.swo
+*~
+.idea/
+.DS_Store
+Thumbs.db
+Desktop.ini
+
+# Keep source JSON, scenario examples, configuration and dependency lockfiles.
 

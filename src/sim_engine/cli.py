@@ -4,6 +4,7 @@ import json
 from pathlib import Path
 
 from .evaluation import gate
+from .config import load_environment
 from .evidence import Journal, dump
 from .feedback import expand_failures
 from .memory import Memory
@@ -34,7 +35,7 @@ def parser() -> argparse.ArgumentParser:
     for variant in ("baseline", "candidate"):
         run.add_argument(f"--{variant}-backend", choices=["rules", "openai-compatible", "nooa"], default="rules")
     run.add_argument("--migration-mode", choices=["cold", "migrated"], default="migrated")
-    run.add_argument("--max-steps", type=int, default=24)
+    run.add_argument("--max-steps", type=int, default=12)
     run.add_argument("--episode-timeout", type=float, default=600)
     traffic = sub.add_parser("traffic", help="Route and execute simulated user flows through the local controller")
     traffic.add_argument("--scenarios", type=Path, required=True)
@@ -85,6 +86,7 @@ def parser() -> argparse.ArgumentParser:
 
 def main() -> None:
     args = parser().parse_args()
+    load_environment()
     if args.command == "generate":
         rows = generate(args.population, args.count, args.seed, args.suite, args.split)
         write_scenarios(args.out, rows)

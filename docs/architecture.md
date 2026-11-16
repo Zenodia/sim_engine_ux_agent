@@ -95,6 +95,10 @@ native journal preserves its own detailed traces. Future export should retain bo
 application correlation IDs and framework span identity.
 
 Direct endpoint requests/responses and provider-reported token counts are recorded.
+The direct adapter uses `AsyncOpenAI` with the NVIDIA endpoint/model configured in
+`.env`; the standalone inference example uses `OpenAI`. Both use Chat Completions.
+Local dotenv loading preserves exported shell variables. Requests default to
+`max_tokens=512` and omit `response_format`/`temperature` unless configured.
 Credentials/Authorization headers are not recorded. Pricing is operator supplied;
 NOOA token/cost aggregation is unavailable in this adapter and remains null rather
 than being presented as free. No system can promise access to hidden model reasoning.

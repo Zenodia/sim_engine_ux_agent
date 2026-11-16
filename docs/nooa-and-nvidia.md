@@ -1,8 +1,9 @@
 # NOOA fit and NVIDIA integration map
 
-Assessment date: 2026-11-16. Repository/API examples were inspected during authoring;
-dependencies were not installed and compatibility was not executed. Current `main`
-may evolve. Pin reviewed versions when preparing the remote environment.
+Assessment date: 2026-11-16. NOOA repository/API examples were inspected during
+authoring; the optional NOOA runtime was not exercised in the native-Windows local
+verification. Core simulation and direct NVIDIA routes were tested separately; see
+[the results](local-verification.md). Current `main` may evolve; pin reviewed versions.
 
 ## Is NOOA a good fit?
 
@@ -34,9 +35,10 @@ NOOA with other harnesses fairly.
 | Component | Status here | Role in the larger architecture |
 |---|---|---|
 | Core sampler and behavioral state machine | Implemented | Reproducible fictional users, goals, corrections, clarification and abandonment |
-| Direct Chat Completions adapter | Implemented; unexecuted | A comparison harness for an actual compatible model endpoint |
+| Direct Chat Completions adapter | Implemented; locally verified | A comparison harness for an actual compatible model endpoint |
 | NOOA typed planner and native journal | Implemented; optional, unexecuted | Swappable candidate/baseline execution layer |
 | Data Designer enrichment | Implemented; optional, unexecuted | Linguistic variation of validated scenario seeds |
+| NVIDIA gateway Nemotron SDG | Implemented; locally verified | Batched user-message variation through the supplied Nemotron model route |
 | NeMo User Sim / Nemotron-Personas | Extension path, no SDK claim | Richer population-grounded user interactions; enterprise-role calibration still needed |
 | NeMo Gym | Extension path, no SDK claim | Environment rollout execution, verifiers, and scenario evaluation |
 | Agent Memory datasets/evaluation work | Design influence; no internal runtime dependency | Memory-dependent tasks, environments, verifiers, dataset quality and provenance |
@@ -48,6 +50,12 @@ NOOA with other harnesses fairly.
 The simple scoped Memory class is owned by this lab. It is not an implementation
 of NeMo Agent Memory, a drop-in enterprise knowledge ingestion service, or a claim
 about NOOA MemoryManager's API. This separation preserves experimental control.
+
+The 100-user toy configuration separates generation from evaluation. The supplied
+Nemotron SDG route generates user-message variations in five-user batches, while the
+Sonnet route remains the agent under test. Token pricing denominators do not control
+user counts. The batch SDG script uses the shared OpenAI-compatible gateway directly;
+it does not claim to be a NeMo User Sim or Data Designer integration.
 
 ## Public sources
 

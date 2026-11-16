@@ -1,13 +1,12 @@
-import asyncio
 import json
 import os
 import re
 import time
-import urllib.request
 from pathlib import Path
 from typing import Any
 
 from .contracts import Action
+from .config import llm_settings, load_environment
 from .evidence import Journal
 from .world import World
 
@@ -87,62 +86,70 @@ async def run_rules(world: World, message: str, variant: str) -> None:
 
 
 class OpenAICompatible:
-    """Plain Chat Completions JSON-action adapter. It does not require an OpenAI account."""
+    """OpenAI SDK Chat Completions adapter for the configured inference service."""
 
     def __init__(self, journal: Journal, variant: str):
+        from openai import AsyncOpenAI
+
         self.journal = journal
-        def setting(key: str, default: str | None = None) -> str:
-            value = os.getenv(f"SIM_{variant.upper()}_LLM_{key}", os.getenv(f"SIM_LLM_{key}", default))
-            if value is None:
-                raise ValueError(f"Missing SIM_LLM_{key} or variant override")
-            return value
-        self.base = setting("BASE_URL").rstrip("/")
-        self.model = setting("MODEL")
-        self.key = setting("API_KEY", "")
-        self.timeout = float(os.environ.get("SIM_LLM_TIMEOUT", "90"))
+        self.settings = llm_settings(variant)
+        self.client = AsyncOpenAI(api_key=self.settings.api_key, base_url=self.settings.base_url,
+                                  timeout=self.settings.timeout, max_retries=0)
         self.input_tokens = 0
         self.output_tokens = 0
         self.usage_available = True
 
     async def decide(self, context: dict, history: list[dict]) -> Action:
         request_body = {
-            "model": self.model,
+            "model": self.settings.model,
             "messages": [{"role": "system", "content": SYSTEM},
                          {"role": "user", "content": json.dumps({"context": context, "history": history})}],
-            "temperature": 0,
-            "response_format": {"type": "json_object"},
+            "max_tokens": self.settings.max_tokens,
         }
+        # Match the supplied NVIDIA example by default: no forced JSON-mode or
+        # temperature parameters. The agent's instruction still requires JSON actions.
+        if self.settings.response_format == "json_object":
+            request_body["response_format"] = {"type": "json_object"}
+        if self.settings.temperature is not None:
+            request_body["temperature"] = self.settings.temperature
+        if self.settings.enable_thinking is not None:
+            request_body["extra_body"] = {"chat_template_kwargs": {"enable_thinking": self.settings.enable_thinking}}
         self.journal.emit("model.request", backend="openai-compatible", request=request_body)
         started = time.perf_counter()
-
-        def invoke() -> dict:
-            headers = {"Content-Type": "application/json"}
-            if self.key:
-                headers["Authorization"] = f"Bearer {self.key}"
-            req = urllib.request.Request(self.base + "/chat/completions",
-                                         json.dumps(request_body).encode(), headers=headers)
-            with urllib.request.urlopen(req, timeout=self.timeout) as response:
-                return json.load(response)
-
-        response = await asyncio.to_thread(invoke)
-        usage = response.get("usage", {})
-        self.usage_available = self.usage_available and all(k in usage for k in ("prompt_tokens", "completion_tokens"))
-        self.input_tokens += usage.get("prompt_tokens", 0)
-        self.output_tokens += usage.get("completion_tokens", 0)
-        msg = response["choices"][0]["message"]
+        response = await self.client.chat.completions.create(**request_body)
+        usage = response.usage.model_dump(exclude_none=True) if response.usage is not None else {}
+        has_usage = all(isinstance(usage.get(k), int) for k in ("prompt_tokens", "completion_tokens"))
+        self.usage_available = self.usage_available and has_usage
+        if has_usage:
+            self.input_tokens += usage["prompt_tokens"]
+            self.output_tokens += usage["completion_tokens"]
+        if not response.choices:
+            raise RuntimeError("Inference returned no completion choices")
+        choice = response.choices[0]
+        msg = choice.message.model_dump(exclude_none=True)
         # Store only exposed output; no attempt to elicit hidden chain of thought.
         self.journal.emit("model.response", message=msg, usage=usage,
+                          finish_reason=choice.finish_reason,
                           latency_ms=(time.perf_counter() - started) * 1000)
-        return Action.model_validate_json(msg["content"])
+        if choice.finish_reason == "length":
+            raise RuntimeError("Action response exceeded SIM_LLM_MAX_TOKENS")
+        content = choice.message.content
+        if not content:
+            raise RuntimeError("Inference returned no text action")
+        # Accept a single Markdown JSON fence, without extracting JSON from prose.
+        text = content.strip()
+        fenced = re.fullmatch(r"```(?:json)?\s*\n?(.*?)\n?```", text, flags=re.DOTALL)
+        return Action.model_validate_json(fenced.group(1).strip() if fenced else text)
 
     async def close(self) -> None:
-        pass
+        await self.client.close()
 
 
 class NooaBackend:
     """NOOA PredictStrategy plans typed actions; the lab controls tool execution."""
 
     def __init__(self, journal: Journal, artifact_dir: Path, variant: str):
+        load_environment()
         from nooa import Agent, PredictStrategy, strategy
         from nooa.tracing import enable_tracing, exporters
         from nooa.unifiedllm import get_llm_client
