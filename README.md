@@ -1,10 +1,11 @@
 # sim_engine_ux_agent
 
-A synthetic-data-powered simulation engine for a fictional enterprise service-desk agent.
+A synthetic-data-powered simulation engine with two worked agent domains: a fictional
+service desk and enterprise workflow creation for self-hosted n8n.
 It exercises the complete loop: **population -> scenarios -> old/new agent runs -> evidence
 and ratings -> release gates -> tenant canary -> rollback -> new corner cases**.
 
-The worked use case is **workspace access restoration across sessions**. A user first
+The first worked use case is **workspace access restoration across sessions**. A user first
 sets a notification preference, then returns to request access. Between sessions, the
 preference may change, authorization may be revoked, or a stale memory may suggest
 privileges the user no longer has. Tools can return hostile text or time out after a
@@ -40,11 +41,49 @@ major part of the original discussion to verified, partial, or untested coverage
 Immediate gaps are actual failure-driven scenario expansion, monitor-triggered
 rollback on bad outcomes, review of SDG meaning, and a budgeted multi-cohort live
 sample with an independent holdout. Optional NVIDIA runtime integrations and real
-production routing remain later work. The n8n use case remains deferred.
+production routing remain later work. The n8n workflow domain is now implemented
+separately; reference and actual-engine validation are distinguished below.
 
 The [detailed run notes](docs/local-verification.md) document compatibility fixes,
 retained failures, and report locations. Results above are recorded in versionable documentation;
 the generated evidence under `artifacts/` remains ignored by Git.
+
+## Second domain: enterprise n8n workflow creation
+
+The new **`n8n-lab`** application creates and revises incident workflows for a
+dedicated self-hosted n8n instance. It includes:
+
+- A 100-user synthetic authoring dataset, optional Nemotron paraphrases, and
+  rules/Sonnet creators operating on a typed workflow specification.
+- A deterministic compiler producing native Webhook, Code, If and HTTP Request
+  nodes, plus an importable [example workflow](examples/n8n/incident-workflow.json).
+- Durable fixture ticketing/messaging services, independent final-effect checks,
+  memory migration, retries and idempotency tests.
+- Separate Python reference and actual n8n REST/webhook executors.
+- An authenticated draft gateway, isolated shadow conversations, evidence-bound
+  baseline/offline/shadow/canary/expansion/full stages and latched rollback.
+- A [dedicated Docker Compose stack](deploy/n8n/compose.yaml) and an explicit,
+  opt-in real-engine integration test.
+
+```powershell
+python -m pip install -e ".[dev]"
+python -m sim_engine.workflow_lab.cli demo --count 100 --out artifacts/n8n-demo
+```
+
+The reference demo makes no inference calls. Its migration controller reaches 100%
+only within the fixture experiment and then performs a rollback drill. Real n8n
+execution requires the Compose stack, its API key and `--executor n8n
+--allow-activation`; it is not implied by a successful reference report. The creator
+gateway produces inactive drafts, so migrating the creator does not silently publish
+workflows or change existing business automations.
+
+See the [implementation plan](docs/n8n-implementation-plan.md) and
+[workflow use case, architecture and runbook](docs/n8n-workflow-use-case.md).
+The [n8n-domain validation record](docs/n8n-validation.md) records 25 passing tests,
+the successful 100-user reference lifecycle through full exposure and rollback,
+four live Sonnet creator cases, and one live four-user Nemotron SDG batch. The actual
+self-hosted engine test is skipped until Docker and the dedicated instance are available.
+The original `sim-engine` service-desk commands continue to work independently.
 
 ## Toy demo size and inference roles
 
@@ -480,6 +519,9 @@ For the supplied Nemotron gateway route and a bounded 100-user batch, use
 | `docs/nooa-and-nvidia.md` | NVIDIA capability map, sources, and integration maturity |
 | `docs/local-verification.md` | Successful local run results, fixes, evidence paths, and scope limits |
 | `docs/recommendation-coverage.md` | Original recommendation checklist, partial coverage, and prioritized remaining work |
+| `src/sim_engine/workflow_lab/` | n8n-domain creators, compiler, fixture services, runtimes, gateway and migration stages |
+| `docs/n8n-workflow-use-case.md` | Second-domain use case, architecture, reference and self-hosted instructions |
+| `docs/n8n-validation.md` | Reference/live-model results and explicit pending real-engine validation |
 | `tests/test_invariants.py` | Manual remote checks for authorization, idempotency, migration, rollback |
 
 Manual checks, if desired: `python -m pip install -e '.[dev]'` then `pytest`.
