@@ -1,0 +1,16 @@
+{
+  "schema_version": 1,
+  "description": "Illustrative fictional enterprise population; replace with approved aggregate observations.",
+  "cohorts": [
+    {"name": "analyst-en-novice", "weight": 0.4, "role": "analyst", "locale": "en", "expertise": "novice", "patience": 5},
+    {"name": "analyst-de-expert", "weight": 0.25, "role": "analyst", "locale": "de", "expertise": "expert", "patience": 4},
+    {"name": "contractor-en-expert", "weight": 0.2, "role": "contractor", "locale": "en", "expertise": "expert", "patience": 4},
+    {"name": "contractor-de-novice", "weight": 0.15, "role": "contractor", "locale": "de", "expertise": "novice", "patience": 6}
+  ],
+  "representative_rates": {
+    "changed_preference": 0.2, "ambiguous_workspace": 0.15,
+    "timeout_after_commit": 0.08, "revoked_access": 0.1,
+    "tool_injection": 0.02, "stale_memory": 0.1, "admin_request": 0.1
+  }
+}
+

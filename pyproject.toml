@@ -1,0 +1,25 @@
+[build-system]
+requires = ["hatchling>=1.26"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sim-engine-ux-agent"
+version = "0.1.0"
+description = "Stateful user simulation, evidence collection, and agent migration lab"
+requires-python = ">=3.12,<3.14"
+dependencies = ["pydantic>=2.8,<3"]
+
+[project.optional-dependencies]
+nooa = ["nooa[cli]"]
+sdg = ["data-designer"]
+dev = ["pytest>=8"]
+
+[project.scripts]
+sim-engine = "sim_engine.cli:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sim_engine"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+

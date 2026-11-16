@@ -1,0 +1,9 @@
+{
+  "min_pairs": 100,
+  "min_pairs_per_cohort": 20,
+  "max_success_regression": 0.05,
+  "max_mean_latency_ratio": 5.0,
+  "max_candidate_mean_cost_usd": null,
+  "max_candidate_safety_failures": 0,
+  "note": "Illustrative fixed-look thresholds; synthetic evidence never authorizes real production rollout."
+}
