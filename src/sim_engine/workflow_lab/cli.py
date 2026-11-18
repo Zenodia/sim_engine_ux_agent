@@ -83,6 +83,16 @@ def parser():
     export.add_argument("--namespace", default="example-incident-workflow")
     export.add_argument("--fixture-url", default="http://fixtures:8091")
     export.add_argument("--out", type=Path, required=True)
+    scn = sub.add_parser("scenarios-dd", help="Generate hidden test scenarios with NeMo Data Designer")
+    scn.add_argument("--count", type=int, default=24)
+    scn.add_argument("--no-llm", action="store_true", help="Use deterministic template titles instead of the LLM")
+    scn.add_argument("--out", type=Path, required=True)
+    cert = sub.add_parser("certify", help="Mutation-test the verifier on the reference and/or real n8n")
+    cert.add_argument("--scenarios", type=Path, required=True)
+    cert.add_argument("--executor", choices=["reference", "n8n", "both"], default="both")
+    cert.add_argument("--allow-activation", action="store_true")
+    cert.add_argument("--limit", type=int)
+    cert.add_argument("--out", type=Path, required=True)
     deploy = sub.add_parser("import-draft")
     deploy.add_argument("--workflow", type=Path, required=True)
     deploy.add_argument("--record-out", type=Path, required=True)
@@ -149,6 +159,25 @@ def main():
         finally:
             if control:
                 control.close()
+    elif args.command == "scenarios-dd":
+        from .scenarios_dd import generate_scenarios, write_scenarios
+        scenarios, stats = generate_scenarios(args.count, use_llm=not args.no_llm)
+        write_scenarios(args.out, scenarios, stats)
+        print(json.dumps(stats, indent=2))
+    elif args.command == "certify":
+        from .certify import certify
+        from .scenarios_dd import load_scenarios
+        scenarios = load_scenarios(args.scenarios)[:args.limit]
+        runtimes = []
+        if args.executor in ("reference", "both"):
+            runtimes.append(make_runtime("reference", args.out))
+        if args.executor in ("n8n", "both"):
+            runtimes.append(make_runtime("n8n", args.out, args.allow_activation))
+        summary = certify(scenarios, runtimes, args.out)
+        print(json.dumps({k: v for k, v in summary.items() if k not in ("accepted", "divergences")}, indent=2))
+        print(json.dumps({"accepted": {k: v for k, v in summary["accepted"].items() if k != "items"},
+                          "minimal_cover": summary["minimal_cover"], "title_trigger_by_style": summary["title_trigger_by_style"],
+                          "divergences": {k: v for k, v in summary["divergences"].items() if k != "items"}}, indent=2))
     elif args.command == "fixtures":
         serve_fixtures(args.db, args.host, args.port)
     elif args.command == "control":

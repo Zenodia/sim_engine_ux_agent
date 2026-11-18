@@ -37,9 +37,27 @@ return [{json: {allowed: true, status: 'planned', namespace: cfg.namespace,
 '''
 
 
-def plan_code(spec: Spec, namespace: str, tenant: str, legacy: bool = False) -> str:
-    return PLAN_JS.replace("__CONFIG__", json.dumps({"spec": spec.model_dump(), "namespace": namespace,
+# Deliberate engine-level defects used only by verifier certification (mutation testing).
+ENGINE_MUTATIONS = ("no_retry", "no_tenant_check", "title_routes")
+# "title_routes" models a workflow that obeys instructions found inside alert text (prompt-injection compliance).
+TITLE_TRIGGER_PATTERN = r'ignore|https?://|"channel"'
+TITLE_SINK_CHANNEL = "external-sink"
+
+
+def plan_code(spec: Spec, namespace: str, tenant: str, legacy: bool = False, mutation: str | None = None) -> str:
+    code = PLAN_JS.replace("__CONFIG__", json.dumps({"spec": spec.model_dump(), "namespace": namespace,
                                                     "tenant": tenant, "legacy": legacy}))
+    if mutation == "no_tenant_check":
+        mutated = code.replace("event.tenant === cfg.tenant && ", "", 1)
+        assert mutated != code, "tenant check not found; update the mutation"
+        code = mutated
+    if mutation == "title_routes":
+        original = "channel: event.region === 'EU' ? cfg.spec.eu_channel : cfg.spec.default_channel,"
+        mutated = code.replace(original, "channel: new RegExp(" + json.dumps(TITLE_TRIGGER_PATTERN) +
+                               ", 'i').test(event.title) ? " + json.dumps(TITLE_SINK_CHANNEL) + " : (" + original[len("channel: "):-1] + "),", 1)
+        assert mutated != code, "channel routing not found; update the mutation"
+        code = mutated
+    return code
 
 
 def _if(field: str) -> dict:
@@ -50,12 +68,15 @@ def _if(field: str) -> dict:
 
 
 def compile_workflow(spec: Spec, namespace: str, tenant: str, fixture_url: str,
-                     variant: str = "candidate") -> dict:
+                     variant: str = "candidate", mutation: str | None = None) -> dict:
     url = urlsplit(fixture_url)
     if url.scheme not in ("http", "https") or not url.hostname or url.username or url.password or url.query or url.fragment:
         raise ValueError("Fixture URL must be an HTTP origin/path without credentials or query parameters")
     if variant not in ("baseline", "candidate"):
         raise ValueError("Unknown compiler variant")
+    if mutation is not None and mutation not in ENGINE_MUTATIONS:
+        raise ValueError("Unknown engine mutation")
+    retry = variant == "candidate" and mutation != "no_retry"
     path = "sim-engine-" + namespace
     nodes = []
     def node(name, kind, version, parameters, x, y=0, **settings):
@@ -68,18 +89,18 @@ def compile_workflow(spec: Spec, namespace: str, tenant: str, fixture_url: str,
     node("Incident webhook", "webhook", 2.1,
          {"httpMethod": "POST", "path": path, "responseMode": "lastNode", "responseData": "firstEntryJson", "options": {}}, 0)
     node("Validate and plan", "code", 2, {"mode": "runOnceForAllItems", "language": "javaScript",
-          "jsCode": plan_code(spec, namespace, tenant, variant == "baseline")}, 240)
+          "jsCode": plan_code(spec, namespace, tenant, variant == "baseline", mutation)}, 240)
     node("Eligible incident", "if", 2.2, _if("allowed"), 480)
     for i, (name, route) in enumerate((("Create ticket", "tickets"), ("Notify team", "notifications"))):
         node(name, "httpRequest", 4.3, {"method": "POST", "url": fixture_url.rstrip("/") + "/v1/" + route,
              "sendBody": True, "contentType": "json", "specifyBody": "json", "jsonBody": "={{ JSON.stringify($json) }}",
              "options": {"timeout": 10000, "redirect": {"redirect": {"followRedirects": False}}}},
-             720 + i * 240, retryOnFail=variant == "candidate", maxTries=2, waitBetweenTries=100)
+             720 + i * 240, retryOnFail=retry, maxTries=2, waitBetweenTries=100)
     node("Escalation required", "if", 2.2, _if("escalate"), 1200)
     node("Escalate incident", "httpRequest", 4.3, {"method": "POST", "url": fixture_url.rstrip("/") + "/v1/escalations",
          "sendBody": True, "contentType": "json", "specifyBody": "json", "jsonBody": "={{ JSON.stringify($json) }}",
          "options": {"timeout": 10000, "redirect": {"redirect": {"followRedirects": False}}}},
-         1440, retryOnFail=variant == "candidate", maxTries=2, waitBetweenTries=100)
+         1440, retryOnFail=retry, maxTries=2, waitBetweenTries=100)
     node("Execution receipt", "code", 2, {"mode": "runOnceForAllItems", "language": "javaScript",
          "jsCode": "return $input.all().map(item => ({json: {status: item.json.allowed ? 'completed' : item.json.status, namespace: item.json.namespace}}));"}, 1680)
     def link(target):

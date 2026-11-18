@@ -1,0 +1,6 @@
+{
+  "tenant": "example-tenant",
+  "user": "example-operator",
+  "session_id": "first-draft",
+  "message": "Create incident intake automation. Project: OPS. Minimum severity: high. Default channel: ops-0. EU channel: eu-current-0. Deduplicate events. Remove personal data. Critical incidents now require acknowledgement before escalation."
+}

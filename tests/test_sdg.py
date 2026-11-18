@@ -10,7 +10,7 @@ from sim_engine.world import UserSimulator
 
 
 def test_sdg_accepts_unchanged_echoed_annotations():
-    source = load_scenarios(Path("examples/one-scenario.jsonl"))[0]
+    source = load_scenarios(Path("examples/service-desk/one-scenario.jsonl"))[0]
     simulator = UserSimulator(source)
     payload = {"users": [{"scenario_id": source.scenario_id,
                          "session1": simulator.initial_message(1),
@@ -23,7 +23,7 @@ def test_sdg_accepts_unchanged_echoed_annotations():
 
 
 def test_sdg_rejects_changed_permission_tokens():
-    source = load_scenarios(Path("examples/one-scenario.jsonl"))[0]
+    source = load_scenarios(Path("examples/service-desk/one-scenario.jsonl"))[0]
     simulator = UserSimulator(source)
     payload = {"users": [{"scenario_id": source.scenario_id,
                          "session1": simulator.initial_message(1),
