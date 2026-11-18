@@ -1,0 +1,117 @@
+<!doctype html><meta charset='utf-8'><title>Failure-driven generation</title><style>body{font:16px system-ui;margin:3em}td,th{padding:.5em;border-bottom:1px solid #ccc;text-align:left}</style><h1>Failure-driven generation</h1><p>Fixture evidence only. Targeted variants against mutants that survived random sampling.</p><table><tr><th>Mutant</th><th>Random kill rate (before)</th><th>Targeted kill rate (after)</th><th>Why parents failed</th><th>Suspected oracle gaps</th></tr><tr><td>threshold_up</td><td>0.333 (exercised in 62%)</td><td>1.0 (2/2)</td><td>{&quot;insufficient_exposure&quot;: 2}</td><td>-</td></tr><tr><td>threshold_down</td><td>0.583 (exercised in 100%)</td><td>1.0 (2/2)</td><td>{&quot;insufficient_exposure&quot;: 2}</td><td>-</td></tr><tr><td>eu_channel_is_default</td><td>0.5 (exercised in 100%)</td><td>1.0 (2/2)</td><td>{&quot;insufficient_exposure&quot;: 2}</td><td>-</td></tr><tr><td>ack_flipped</td><td>0.375 (exercised in 100%)</td><td>1.0 (2/2)</td><td>{&quot;insufficient_exposure&quot;: 2}</td><td>-</td></tr><tr><td>pii_leak</td><td>0.75 (exercised in 100%)</td><td>1.0 (2/2)</td><td>{&quot;insufficient_exposure&quot;: 2}</td><td>-</td></tr><tr><td>no_dedupe</td><td>0.417 (exercised in 100%)</td><td>1.0 (2/2)</td><td>{&quot;insufficient_exposure&quot;: 2}</td><td>-</td></tr><tr><td>wrong_project</td><td>0.75 (exercised in 100%)</td><td>1.0 (2/2)</td><td>{&quot;insufficient_exposure&quot;: 2}</td><td>-</td></tr><tr><td>no_retry</td><td>0.556 (exercised in 38%)</td><td>1.0 (2/2)</td><td>{&quot;insufficient_exposure&quot;: 2}</td><td>-</td></tr><tr><td>no_tenant_check</td><td>1.0 (exercised in 8%)</td><td>1.0 (2/2)</td><td>{&quot;unexercised&quot;: 2}</td><td>-</td></tr><tr><td>title_routes</td><td>1.0 (exercised in 25%)</td><td>1.0 (2/2)</td><td>{&quot;unexercised&quot;: 2}</td><td>-</td></tr><tr><td>escalate_high</td><td>1.0 (exercised in 17%)</td><td>1.0 (2/2)</td><td>{&quot;unexercised&quot;: 2}</td><td>-</td></tr><tr><td>key_collision</td><td>None (exercised in 0%)</td><td>1.0 (2/2)</td><td>{&quot;unexercised&quot;: 2}</td><td>-</td></tr><tr><td>notify_first</td><td>1.0 (exercised in 75%)</td><td>1.0 (2/2)</td><td>{&quot;unexercised&quot;: 2}</td><td>-</td></tr><tr><td>eu_threshold_up</td><td>1.0 (exercised in 29%)</td><td>1.0 (2/2)</td><td>{&quot;unexercised&quot;: 2}</td><td>-</td></tr><tr><td>us_ack_ignored</td><td>1.0 (exercised in 17%)</td><td>1.0 (2/2)</td><td>{&quot;unexercised&quot;: 2}</td><td>-</td></tr><tr><td>title_limit_200</td><td>1.0 (exercised in 25%)</td><td>1.0 (2/2)</td><td>{&quot;unexercised&quot;: 2}</td><td>-</td></tr></table><pre>{
+  &quot;primary_runtime&quot;: &quot;n8n&quot;,
+  &quot;per_mutant_requested&quot;: 2,
+  &quot;totals&quot;: {
+    &quot;variants&quot;: 32,
+    &quot;control_ok&quot;: 32,
+    &quot;killed&quot;: 32
+  },
+  &quot;lineage_preserved&quot;: true,
+  &quot;reference_vs_n8n&quot;: {
+    &quot;compared&quot;: 32,
+    &quot;divergences&quot;: 0
+  },
+  &quot;generation&quot;: {
+    &quot;requested&quot;: 32,
+    &quot;rows&quot;: 32,
+    &quot;seed&quot;: null,
+    &quot;seeded_from_rows&quot;: true,
+    &quot;llm_titles&quot;: true,
+    &quot;model&quot;: &quot;nvidia/nemotron-3.5-lightning-30b-a3b&quot;,
+    &quot;accepted&quot;: 32,
+    &quot;rejected_by_control_validator&quot;: 0,
+    &quot;empty_llm_titles_replaced&quot;: 0
+  },
+  &quot;plan_causes&quot;: {
+    &quot;insufficient_exposure&quot;: 16,
+    &quot;unexercised&quot;: 16
+  },
+  &quot;fixed_suite_exercise_below_100pct&quot;: {
+    &quot;threshold_up&quot;: 0.625,
+    &quot;no_retry&quot;: 0.375,
+    &quot;escalate_high&quot;: 0.625,
+    &quot;us_ack_ignored&quot;: 0.75
+  },
+  &quot;proposed_events_for_fixed_suite&quot;: {
+    &quot;threshold_up&quot;: {
+      &quot;variant&quot;: &quot;scn-5000&quot;,
+      &quot;events&quot;: [
+        {
+          &quot;event_id&quot;: &quot;probe-1&quot;,
+          &quot;severity&quot;: &quot;medium&quot;,
+          &quot;region&quot;: &quot;EU&quot;,
+          &quot;acknowledged&quot;: true
+        },
+        {
+          &quot;event_id&quot;: &quot;probe-1&quot;,
+          &quot;severity&quot;: &quot;medium&quot;,
+          &quot;region&quot;: &quot;EU&quot;,
+          &quot;acknowledged&quot;: true
+        },
+        {
+          &quot;event_id&quot;: &quot;low-1&quot;,
+          &quot;severity&quot;: &quot;low&quot;,
+          &quot;region&quot;: &quot;US&quot;,
+          &quot;acknowledged&quot;: true
+        }
+      ]
+    },
+    &quot;no_retry&quot;: {
+      &quot;variant&quot;: &quot;scn-5014&quot;,
+      &quot;events&quot;: [
+        {
+          &quot;event_id&quot;: &quot;probe-1&quot;,
+          &quot;severity&quot;: &quot;critical&quot;,
+          &quot;region&quot;: &quot;US&quot;,
+          &quot;acknowledged&quot;: false
+        },
+        {
+          &quot;event_id&quot;: &quot;low-1&quot;,
+          &quot;severity&quot;: &quot;low&quot;,
+          &quot;region&quot;: &quot;US&quot;,
+          &quot;acknowledged&quot;: true
+        }
+      ]
+    },
+    &quot;escalate_high&quot;: {
+      &quot;variant&quot;: &quot;scn-5020&quot;,
+      &quot;events&quot;: [
+        {
+          &quot;event_id&quot;: &quot;probe-1&quot;,
+          &quot;severity&quot;: &quot;high&quot;,
+          &quot;region&quot;: &quot;EU&quot;,
+          &quot;acknowledged&quot;: true
+        },
+        {
+          &quot;event_id&quot;: &quot;low-1&quot;,
+          &quot;severity&quot;: &quot;low&quot;,
+          &quot;region&quot;: &quot;US&quot;,
+          &quot;acknowledged&quot;: true
+        },
+        {
+          &quot;event_id&quot;: &quot;probe-1&quot;,
+          &quot;severity&quot;: &quot;high&quot;,
+          &quot;region&quot;: &quot;EU&quot;,
+          &quot;acknowledged&quot;: true
+        }
+      ]
+    },
+    &quot;us_ack_ignored&quot;: {
+      &quot;variant&quot;: &quot;scn-5028&quot;,
+      &quot;events&quot;: [
+        {
+          &quot;event_id&quot;: &quot;probe-1&quot;,
+          &quot;severity&quot;: &quot;high&quot;,
+          &quot;region&quot;: &quot;US&quot;,
+          &quot;acknowledged&quot;: false
+        },
+        {
+          &quot;event_id&quot;: &quot;crit-2&quot;,
+          &quot;severity&quot;: &quot;critical&quot;,
+          &quot;region&quot;: &quot;US&quot;,
+          &quot;acknowledged&quot;: false
+        }
+      ]
+    }
+  }
+}</pre>

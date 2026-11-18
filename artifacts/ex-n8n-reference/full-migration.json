@@ -1,0 +1,13 @@
+{
+  "release": "incident-creator-v1:e6f7fc8abaeb6ceeef21407d16d044ffce7607b4ae4511e599c7e1ebad03944d",
+  "executor": "reference",
+  "scope": "fixture",
+  "phase": "full",
+  "percent": 100.0,
+  "paused": false,
+  "salt": "incident-creator-v1",
+  "minimum_candidate_observations": 5,
+  "max_latency_ms": 60000,
+  "max_cost_usd": null,
+  "production_authorized": false
+}

@@ -1,0 +1,9 @@
+{
+  "project": "OPS",
+  "minimum_severity": "medium",
+  "default_channel": "ops-2",
+  "eu_channel": "eu-old-2",
+  "deduplicate": true,
+  "minimize_personal_data": true,
+  "acknowledgement_before_escalation": false
+}

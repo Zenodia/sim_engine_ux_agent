@@ -1,0 +1,11 @@
+{
+  "requested": 24,
+  "rows": 24,
+  "seed": 42,
+  "seeded_from_rows": false,
+  "llm_titles": false,
+  "model": null,
+  "accepted": 24,
+  "rejected_by_control_validator": 0,
+  "empty_llm_titles_replaced": 0
+}

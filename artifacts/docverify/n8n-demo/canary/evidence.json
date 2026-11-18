@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "evidence_id": "e5cbea92-40a1-493b-bab7-3e58bc045bae",
+  "release": "incident-creator-v1:e6f7fc8abaeb6ceeef21407d16d044ffce7607b4ae4511e599c7e1ebad03944d",
+  "protocol": "incident-workflow-v1",
+  "stage": "canary",
+  "executor": "reference",
+  "scope": "fixture",
+  "provenance": "synthetic",
+  "observed_at": "2026-11-18T14:52:20.895112+00:00",
+  "window": "ec819558-4ae0-49f4-819e-619a1d2138d7",
+  "observations": 100,
+  "candidate_observations": 10,
+  "baseline_observations": 90,
+  "candidate_failures": 0,
+  "baseline_failures": 90,
+  "coverage": [
+    "business-en-expert",
+    "business-en-novice",
+    "ops-en-expert",
+    "ops-en-novice"
+  ],
+  "passed": true,
+  "artifacts_digest": "b56bd3a2e399b7f3b2f23c7e9d74e415b720847b0e90f344665eba700b9f979d",
+  "dataset_digest": "5ba9bda1c8fdc0f9dca20a759e50e09ee15d96b3b29bd4852fba4c518cd4eb62",
+  "candidate_mean_latency_ms": 66.84324620000552,
+  "candidate_mean_cost_usd": 0.0,
+  "production_authorized": false
+}

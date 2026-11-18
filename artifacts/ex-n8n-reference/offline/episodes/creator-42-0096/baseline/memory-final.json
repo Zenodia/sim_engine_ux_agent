@@ -1,0 +1,16 @@
+{
+  "schema": 1,
+  "scope": {
+    "tenant": "tenant-19",
+    "user": "synthetic-creator-96"
+  },
+  "data": {
+    "project": "SRE",
+    "minimum_severity": "high",
+    "default_channel": "ops-0",
+    "eu_channel": "eu-old-0",
+    "deduplicate": true,
+    "minimize_personal_data": true,
+    "acknowledgement_before_escalation": false
+  }
+}

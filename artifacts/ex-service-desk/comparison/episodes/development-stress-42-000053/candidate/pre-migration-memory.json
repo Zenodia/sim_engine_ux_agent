@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "scope": {
+    "tenant": "tenant-10",
+    "user": "synthetic-development-stress-42-000053",
+    "namespace": "cf94e242-d5f4-4f8f-a9ff-a03eda10988e/development-stress-42-000053/candidate"
+  },
+  "data": {
+    "notification_channel": "chat"
+  }
+}

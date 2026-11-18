@@ -1,0 +1,11 @@
+{
+  "window": "aadb3ee9-78b2-4369-a3ae-b1004e963aa7",
+  "release": "incident-creator-v1:e6f7fc8abaeb6ceeef21407d16d044ffce7607b4ae4511e599c7e1ebad03944d",
+  "executor": "reference",
+  "creator_backend": "rules",
+  "stage": "shadow",
+  "scope": "fixture",
+  "user_count": 100,
+  "origin": "synthetic",
+  "dataset_digest": "5ba9bda1c8fdc0f9dca20a759e50e09ee15d96b3b29bd4852fba4c518cd4eb62"
+}

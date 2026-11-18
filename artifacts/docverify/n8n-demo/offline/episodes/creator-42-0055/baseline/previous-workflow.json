@@ -1,0 +1,306 @@
+{
+  "name": "sim-engine:99940ff9b3dd4feba0a4fd37763211d7-previous",
+  "nodes": [
+    {
+      "id": "493c4300-883a-5855-a019-2747f062d951",
+      "name": "Incident webhook",
+      "type": "n8n-nodes-base.webhook",
+      "typeVersion": 2.1,
+      "position": [
+        0,
+        0
+      ],
+      "parameters": {
+        "httpMethod": "POST",
+        "path": "sim-engine-99940ff9b3dd4feba0a4fd37763211d7-previous",
+        "responseMode": "lastNode",
+        "responseData": "firstEntryJson",
+        "options": {}
+      },
+      "webhookId": "d2d4318d-b1d7-5b71-b4cb-4ca84a5b422e"
+    },
+    {
+      "id": "1dac384e-ca0b-5932-8066-db748b6b1bd7",
+      "name": "Validate and plan",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        240,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "\nconst cfg = {\"spec\": {\"project\": \"SRE\", \"minimum_severity\": \"medium\", \"default_channel\": \"ops-3\", \"eu_channel\": \"eu-old-3\", \"deduplicate\": true, \"minimize_personal_data\": true, \"acknowledgement_before_escalation\": false}, \"namespace\": \"99940ff9b3dd4feba0a4fd37763211d7-previous\", \"tenant\": \"tenant-11\", \"legacy\": true};\nconst input = $input.first().json;\nconst body = input.body || input;\nconst event = body.event || {};\nconst severity = {low: 0, medium: 1, high: 2, critical: 3};\nconst valid = event.tenant === cfg.tenant && typeof event.event_id === 'string' &&\n  /^[A-Za-z0-9_-]{1,100}$/.test(event.event_id) &&\n  Object.hasOwn(severity, event.severity) && ['EU', 'US'].includes(event.region) &&\n  typeof event.title === 'string' && event.title.length <= 1000 &&\n  typeof event.service === 'string' && typeof event.acknowledged === 'boolean';\nif (!valid) return [{json: {allowed: false, status: 'rejected', namespace: cfg.namespace}}];\nif (severity[event.severity] < severity[cfg.spec.minimum_severity])\n  return [{json: {allowed: false, status: 'filtered', namespace: cfg.namespace}}];\nconst clean = cfg.spec.minimize_personal_data ? {\n  event_id: event.event_id, tenant: cfg.tenant, severity: event.severity,\n  region: event.region, title: event.title, service: event.service,\n  acknowledged: event.acknowledged\n} : {...event};\nconst suffix = cfg.spec.deduplicate && !cfg.legacy ? '' : ':' + String(body.delivery_id || 'delivery');\nreturn [{json: {allowed: true, status: 'planned', namespace: cfg.namespace,\n  tenant: cfg.tenant, event: clean, project: cfg.spec.project,\n  channel: event.region === 'EU' ? cfg.spec.eu_channel : cfg.spec.default_channel,\n  effect_key: event.event_id + suffix,\n  escalate: event.severity === 'critical' &&\n    (!cfg.spec.acknowledgement_before_escalation || event.acknowledged)}}];\n"
+      }
+    },
+    {
+      "id": "83ccab27-94eb-5489-bd66-1e0abb2d9a1f",
+      "name": "Eligible incident",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        480,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "957f5c60-a4c5-5c15-a686-9d7279892954",
+              "leftValue": "={{ $json.allowed }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "528a29df-0832-557a-a615-16489622d81f",
+      "name": "Create ticket",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        720,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://fixtures:8091/v1/tickets",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 10000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "retryOnFail": false,
+      "maxTries": 2,
+      "waitBetweenTries": 100
+    },
+    {
+      "id": "db6f2751-9452-5264-8e21-f08dbf5f24f5",
+      "name": "Notify team",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        960,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://fixtures:8091/v1/notifications",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 10000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "retryOnFail": false,
+      "maxTries": 2,
+      "waitBetweenTries": 100
+    },
+    {
+      "id": "f584ddf9-4860-5a50-90e0-da996c605727",
+      "name": "Escalation required",
+      "type": "n8n-nodes-base.if",
+      "typeVersion": 2.2,
+      "position": [
+        1200,
+        0
+      ],
+      "parameters": {
+        "conditions": {
+          "options": {
+            "caseSensitive": true,
+            "leftValue": "",
+            "typeValidation": "strict",
+            "version": 2
+          },
+          "conditions": [
+            {
+              "id": "f89f6704-93d4-5741-a75e-0791aa232181",
+              "leftValue": "={{ $json.escalate }}",
+              "rightValue": true,
+              "operator": {
+                "type": "boolean",
+                "operation": "true",
+                "singleValue": true
+              }
+            }
+          ],
+          "combinator": "and"
+        },
+        "options": {}
+      }
+    },
+    {
+      "id": "c0c6a1e2-dea0-563d-b6af-7e71965e78c1",
+      "name": "Escalate incident",
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.3,
+      "position": [
+        1440,
+        0
+      ],
+      "parameters": {
+        "method": "POST",
+        "url": "http://fixtures:8091/v1/escalations",
+        "sendBody": true,
+        "contentType": "json",
+        "specifyBody": "json",
+        "jsonBody": "={{ JSON.stringify($json) }}",
+        "options": {
+          "timeout": 10000,
+          "redirect": {
+            "redirect": {
+              "followRedirects": false
+            }
+          }
+        }
+      },
+      "retryOnFail": false,
+      "maxTries": 2,
+      "waitBetweenTries": 100
+    },
+    {
+      "id": "0574f0d5-15c9-554a-808e-b04a21e86000",
+      "name": "Execution receipt",
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        1680,
+        0
+      ],
+      "parameters": {
+        "mode": "runOnceForAllItems",
+        "language": "javaScript",
+        "jsCode": "return $input.all().map(item => ({json: {status: item.json.allowed ? 'completed' : item.json.status, namespace: item.json.namespace}}));"
+      }
+    }
+  ],
+  "connections": {
+    "Incident webhook": {
+      "main": [
+        [
+          {
+            "node": "Validate and plan",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Validate and plan": {
+      "main": [
+        [
+          {
+            "node": "Eligible incident",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Eligible incident": {
+      "main": [
+        [
+          {
+            "node": "Create ticket",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execution receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Create ticket": {
+      "main": [
+        [
+          {
+            "node": "Notify team",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Notify team": {
+      "main": [
+        [
+          {
+            "node": "Escalation required",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalation required": {
+      "main": [
+        [
+          {
+            "node": "Escalate incident",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        [
+          {
+            "node": "Execution receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Escalate incident": {
+      "main": [
+        [
+          {
+            "node": "Execution receipt",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "settings": {
+    "executionOrder": "v1",
+    "saveDataSuccessExecution": "all",
+    "saveDataErrorExecution": "all"
+  }
+}

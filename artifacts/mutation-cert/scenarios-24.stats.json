@@ -1,0 +1,9 @@
+{
+  "requested": 24,
+  "rows": 24,
+  "llm_titles": true,
+  "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+  "accepted": 24,
+  "rejected_by_control_validator": 0,
+  "empty_llm_titles_replaced": 0
+}

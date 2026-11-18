@@ -1,0 +1,44 @@
+{
+  "schema": 2,
+  "scope": {
+    "tenant": "tenant-8",
+    "user": "synthetic-creator-44"
+  },
+  "data": {
+    "project": {
+      "value": "OPS",
+      "source": "user-approved-requirement",
+      "revision": 1
+    },
+    "minimum_severity": {
+      "value": "medium",
+      "source": "user-approved-requirement",
+      "revision": 1
+    },
+    "default_channel": {
+      "value": "ops-0",
+      "source": "user-approved-requirement",
+      "revision": 1
+    },
+    "eu_channel": {
+      "value": "eu-current-0",
+      "source": "user-approved-requirement",
+      "revision": 1
+    },
+    "deduplicate": {
+      "value": true,
+      "source": "user-approved-requirement",
+      "revision": 1
+    },
+    "minimize_personal_data": {
+      "value": true,
+      "source": "user-approved-requirement",
+      "revision": 1
+    },
+    "acknowledgement_before_escalation": {
+      "value": true,
+      "source": "user-approved-requirement",
+      "revision": 1
+    }
+  }
+}

@@ -1,0 +1,12 @@
+{
+  "baseline": {
+    "flows": 50,
+    "successes": 0,
+    "errors": 0
+  },
+  "candidate": {
+    "flows": 50,
+    "successes": 50,
+    "errors": 0
+  }
+}

@@ -1,0 +1,283 @@
+{
+  "runtimes": [
+    "reference"
+  ],
+  "primary_runtime": "reference",
+  "scenarios": 12,
+  "suites": {
+    "reference/legacy": {
+      "control_pass": 12,
+      "control_total": 12,
+      "applicable_mutants": 100,
+      "killed": 93,
+      "kill_rate": 0.93,
+      "errors": 0,
+      "per_mutant": {
+        "threshold_up": {
+          "applicable": 8,
+          "killed": 8,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "threshold_down": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "eu_channel_is_default": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "ack_flipped": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "pii_leak": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "no_dedupe": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "no_retry": {
+          "applicable": 8,
+          "killed": 1,
+          "errors": 0,
+          "kill_rate": 0.125
+        },
+        "no_tenant_check": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "title_routes": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        }
+      }
+    },
+    "reference/generated": {
+      "control_pass": 12,
+      "control_total": 12,
+      "applicable_mutants": 85,
+      "killed": 53,
+      "kill_rate": 0.624,
+      "errors": 0,
+      "per_mutant": {
+        "threshold_up": {
+          "applicable": 8,
+          "killed": 2,
+          "errors": 0,
+          "kill_rate": 0.25
+        },
+        "threshold_down": {
+          "applicable": 12,
+          "killed": 8,
+          "errors": 0,
+          "kill_rate": 0.667
+        },
+        "eu_channel_is_default": {
+          "applicable": 12,
+          "killed": 6,
+          "errors": 0,
+          "kill_rate": 0.5
+        },
+        "ack_flipped": {
+          "applicable": 12,
+          "killed": 6,
+          "errors": 0,
+          "kill_rate": 0.5
+        },
+        "pii_leak": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "no_dedupe": {
+          "applicable": 12,
+          "killed": 4,
+          "errors": 0,
+          "kill_rate": 0.333
+        },
+        "no_retry": {
+          "applicable": 8,
+          "killed": 7,
+          "errors": 0,
+          "kill_rate": 0.875
+        },
+        "no_tenant_check": {
+          "applicable": 5,
+          "killed": 5,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "title_routes": {
+          "applicable": 4,
+          "killed": 3,
+          "errors": 0,
+          "kill_rate": 0.75
+        }
+      }
+    }
+  },
+  "accepted": {
+    "count": 6,
+    "of": 12,
+    "with_any_kill": 12,
+    "train": 4,
+    "holdout": 2,
+    "novel_kill_pairs": 6,
+    "items": [
+      {
+        "scenario": "scn-0001",
+        "split": "train",
+        "base_task": "base-aed93892",
+        "kills": [
+          "ack_flipped",
+          "no_retry",
+          "pii_leak",
+          "threshold_down"
+        ],
+        "novel_kills_vs_legacy": [
+          "no_retry"
+        ],
+        "hostile_style": "long_markdown"
+      },
+      {
+        "scenario": "scn-0002",
+        "split": "holdout",
+        "base_task": "base-2548651d",
+        "kills": [
+          "eu_channel_is_default",
+          "no_retry",
+          "pii_leak",
+          "title_routes"
+        ],
+        "novel_kills_vs_legacy": [
+          "no_retry"
+        ],
+        "hostile_style": "instruction_injection"
+      },
+      {
+        "scenario": "scn-0003",
+        "split": "train",
+        "base_task": "base-a3e949cb",
+        "kills": [
+          "ack_flipped",
+          "no_retry",
+          "no_tenant_check",
+          "pii_leak",
+          "threshold_down"
+        ],
+        "novel_kills_vs_legacy": [
+          "no_retry"
+        ],
+        "hostile_style": "instruction_injection"
+      },
+      {
+        "scenario": "scn-0004",
+        "split": "holdout",
+        "base_task": "base-c3704ae2",
+        "kills": [
+          "ack_flipped",
+          "eu_channel_is_default",
+          "no_retry",
+          "pii_leak",
+          "threshold_down"
+        ],
+        "novel_kills_vs_legacy": [
+          "no_retry"
+        ],
+        "hostile_style": "long_markdown"
+      },
+      {
+        "scenario": "scn-0008",
+        "split": "train",
+        "base_task": "base-17f3f54e",
+        "kills": [
+          "no_retry",
+          "pii_leak",
+          "threshold_down"
+        ],
+        "novel_kills_vs_legacy": [
+          "no_retry"
+        ],
+        "hostile_style": "benign"
+      },
+      {
+        "scenario": "scn-0009",
+        "split": "train",
+        "base_task": "base-8077d18b",
+        "kills": [
+          "eu_channel_is_default",
+          "no_retry",
+          "no_tenant_check",
+          "pii_leak",
+          "threshold_down"
+        ],
+        "novel_kills_vs_legacy": [
+          "no_retry"
+        ],
+        "hostile_style": "benign"
+      }
+    ]
+  },
+  "minimal_cover": {
+    "mutant_types": [
+      "ack_flipped",
+      "eu_channel_is_default",
+      "no_dedupe",
+      "no_retry",
+      "no_tenant_check",
+      "pii_leak",
+      "threshold_down",
+      "threshold_up",
+      "title_routes"
+    ],
+    "scenarios": [
+      "scn-0000",
+      "scn-0003",
+      "scn-0002"
+    ],
+    "size": 3
+  },
+  "title_trigger_by_style": {
+    "benign/template": {
+      "scenarios": 5,
+      "title_triggers": 0
+    },
+    "embedded_json/template": {
+      "scenarios": 2,
+      "title_triggers": 2
+    },
+    "instruction_injection/template": {
+      "scenarios": 2,
+      "title_triggers": 2
+    },
+    "long_markdown/template": {
+      "scenarios": 3,
+      "title_triggers": 0
+    }
+  },
+  "divergences": {
+    "compared": null,
+    "count": 0,
+    "items": []
+  },
+  "blind_spots": [],
+  "legacy_blind_spots": []
+}

@@ -1,0 +1,443 @@
+[
+  {
+    "runtime": "reference",
+    "variant": "scn-5000",
+    "parent": "scn-0007",
+    "mutant": "threshold_up",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5001",
+    "parent": "scn-0003",
+    "mutant": "threshold_up",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5002",
+    "parent": "scn-0011",
+    "mutant": "threshold_down",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5003",
+    "parent": "scn-0004",
+    "mutant": "threshold_down",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5004",
+    "parent": "scn-0009",
+    "mutant": "eu_channel_is_default",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "regional_routing"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5005",
+    "parent": "scn-0010",
+    "mutant": "eu_channel_is_default",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "regional_routing"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5006",
+    "parent": "scn-0003",
+    "mutant": "ack_flipped",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5007",
+    "parent": "scn-0004",
+    "mutant": "ack_flipped",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5008",
+    "parent": "scn-0005",
+    "mutant": "pii_leak",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "privacy"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5009",
+    "parent": "scn-0010",
+    "mutant": "pii_leak",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "privacy"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5010",
+    "parent": "scn-0008",
+    "mutant": "no_dedupe",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once",
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5011",
+    "parent": "scn-0000",
+    "mutant": "no_dedupe",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once",
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5012",
+    "parent": "scn-0010",
+    "mutant": "wrong_project",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "ticket_project"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5013",
+    "parent": "scn-0005",
+    "mutant": "wrong_project",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "ticket_project"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5014",
+    "parent": "scn-0010",
+    "mutant": "no_retry",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once",
+      "notifications_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5015",
+    "parent": "scn-0005",
+    "mutant": "no_retry",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "notifications_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5016",
+    "parent": "scn-0000",
+    "mutant": "no_tenant_check",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once",
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5017",
+    "parent": "scn-0004",
+    "mutant": "no_tenant_check",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once",
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5018",
+    "parent": "scn-0011",
+    "mutant": "title_routes",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "regional_routing",
+      "untrusted_title_is_data"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5019",
+    "parent": "scn-0010",
+    "mutant": "title_routes",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "regional_routing",
+      "untrusted_title_is_data"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5020",
+    "parent": "scn-0006",
+    "mutant": "escalate_high",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5021",
+    "parent": "scn-0000",
+    "mutant": "escalate_high",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5022",
+    "parent": "scn-0005",
+    "mutant": "key_collision",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once",
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5023",
+    "parent": "scn-0003",
+    "mutant": "key_collision",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once",
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5024",
+    "parent": "scn-0000",
+    "mutant": "notify_first",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "effect_order"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5025",
+    "parent": "scn-0005",
+    "mutant": "notify_first",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "effect_order"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5026",
+    "parent": "scn-0003",
+    "mutant": "eu_threshold_up",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5027",
+    "parent": "scn-0009",
+    "mutant": "eu_threshold_up",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once",
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5028",
+    "parent": "scn-0008",
+    "mutant": "us_ack_ignored",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5029",
+    "parent": "scn-0005",
+    "mutant": "us_ack_ignored",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5030",
+    "parent": "scn-0002",
+    "mutant": "title_limit_200",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  },
+  {
+    "runtime": "reference",
+    "variant": "scn-5031",
+    "parent": "scn-0010",
+    "mutant": "title_limit_200",
+    "control_ok": true,
+    "exercised": true,
+    "killed": true,
+    "failed_checks": [
+      "escalations_exactly_once",
+      "notifications_exactly_once",
+      "tickets_exactly_once"
+    ],
+    "error": null
+  }
+]

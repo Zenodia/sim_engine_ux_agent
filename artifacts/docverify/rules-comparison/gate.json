@@ -1,0 +1,39 @@
+{
+  "decision": "eligible_for_manual_review",
+  "reasons": [],
+  "paired_comparisons": {
+    "ALL": {
+      "n": 100,
+      "candidate_minus_baseline": 0.8,
+      "lower_bound": 0.4965145741229708,
+      "alpha": 0.01
+    },
+    "analyst-de-expert": {
+      "n": 25,
+      "candidate_minus_baseline": 0.88,
+      "lower_bound": 0.2730291482459415,
+      "alpha": 0.01
+    },
+    "analyst-en-novice": {
+      "n": 25,
+      "candidate_minus_baseline": 0.68,
+      "lower_bound": 0.07302914824594153,
+      "alpha": 0.01
+    },
+    "contractor-de-novice": {
+      "n": 25,
+      "candidate_minus_baseline": 0.68,
+      "lower_bound": 0.07302914824594153,
+      "alpha": 0.01
+    },
+    "contractor-en-expert": {
+      "n": 25,
+      "candidate_minus_baseline": 0.96,
+      "lower_bound": 0.35302914824594145,
+      "alpha": 0.01
+    }
+  },
+  "method": "one-sided Hoeffding bound; familywise alpha 0.05; fixed-look only",
+  "production_promotion_authorized": false,
+  "note": "Synthetic evidence only. Requires human and real-traffic validation."
+}

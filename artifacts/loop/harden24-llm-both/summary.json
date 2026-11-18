@@ -1,0 +1,375 @@
+{
+  "primary_runtime": "n8n",
+  "per_mutant_requested": 2,
+  "totals": {
+    "variants": 32,
+    "control_ok": 32,
+    "killed": 32
+  },
+  "targets": {
+    "threshold_up": {
+      "random_before": {
+        "applicable": 15,
+        "survived": 10,
+        "exercised": 0.625,
+        "kill_rate": 0.333
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "insufficient_exposure": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "threshold_down": {
+      "random_before": {
+        "applicable": 24,
+        "survived": 10,
+        "exercised": 1.0,
+        "kill_rate": 0.583
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "insufficient_exposure": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "eu_channel_is_default": {
+      "random_before": {
+        "applicable": 24,
+        "survived": 12,
+        "exercised": 1.0,
+        "kill_rate": 0.5
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "insufficient_exposure": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "ack_flipped": {
+      "random_before": {
+        "applicable": 24,
+        "survived": 15,
+        "exercised": 1.0,
+        "kill_rate": 0.375
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "insufficient_exposure": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "pii_leak": {
+      "random_before": {
+        "applicable": 24,
+        "survived": 6,
+        "exercised": 1.0,
+        "kill_rate": 0.75
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "insufficient_exposure": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "no_dedupe": {
+      "random_before": {
+        "applicable": 24,
+        "survived": 14,
+        "exercised": 1.0,
+        "kill_rate": 0.417
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "insufficient_exposure": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "wrong_project": {
+      "random_before": {
+        "applicable": 24,
+        "survived": 6,
+        "exercised": 1.0,
+        "kill_rate": 0.75
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "insufficient_exposure": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "no_retry": {
+      "random_before": {
+        "applicable": 9,
+        "survived": 4,
+        "exercised": 0.375,
+        "kill_rate": 0.556
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "insufficient_exposure": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "no_tenant_check": {
+      "random_before": {
+        "applicable": 2,
+        "survived": 0,
+        "exercised": 0.083,
+        "kill_rate": 1.0
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "unexercised": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "title_routes": {
+      "random_before": {
+        "applicable": 6,
+        "survived": 0,
+        "exercised": 0.25,
+        "kill_rate": 1.0
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "unexercised": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "escalate_high": {
+      "random_before": {
+        "applicable": 4,
+        "survived": 0,
+        "exercised": 0.167,
+        "kill_rate": 1.0
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "unexercised": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "key_collision": {
+      "random_before": {
+        "applicable": 0,
+        "survived": 0,
+        "exercised": 0.0,
+        "kill_rate": null
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "unexercised": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "notify_first": {
+      "random_before": {
+        "applicable": 18,
+        "survived": 0,
+        "exercised": 0.75,
+        "kill_rate": 1.0
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "unexercised": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "eu_threshold_up": {
+      "random_before": {
+        "applicable": 7,
+        "survived": 0,
+        "exercised": 0.292,
+        "kill_rate": 1.0
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "unexercised": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "us_ack_ignored": {
+      "random_before": {
+        "applicable": 4,
+        "survived": 0,
+        "exercised": 0.167,
+        "kill_rate": 1.0
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "unexercised": 2
+      },
+      "suspected_oracle_gaps": []
+    },
+    "title_limit_200": {
+      "random_before": {
+        "applicable": 6,
+        "survived": 0,
+        "exercised": 0.25,
+        "kill_rate": 1.0
+      },
+      "variants": 2,
+      "exercised": 2,
+      "killed": 2,
+      "targeted_kill_rate": 1.0,
+      "causes_before": {
+        "unexercised": 2
+      },
+      "suspected_oracle_gaps": []
+    }
+  },
+  "lineage_preserved": true,
+  "reference_vs_n8n": {
+    "compared": 32,
+    "divergences": 0
+  },
+  "generation": {
+    "requested": 32,
+    "rows": 32,
+    "seed": null,
+    "seeded_from_rows": true,
+    "llm_titles": true,
+    "model": "nvidia/nemotron-3.5-lightning-30b-a3b",
+    "accepted": 32,
+    "rejected_by_control_validator": 0,
+    "empty_llm_titles_replaced": 0
+  },
+  "plan_causes": {
+    "insufficient_exposure": 16,
+    "unexercised": 16
+  },
+  "fixed_suite_exercise_below_100pct": {
+    "threshold_up": 0.625,
+    "no_retry": 0.375,
+    "escalate_high": 0.625,
+    "us_ack_ignored": 0.75
+  },
+  "proposed_events_for_fixed_suite": {
+    "threshold_up": {
+      "variant": "scn-5000",
+      "events": [
+        {
+          "event_id": "probe-1",
+          "severity": "medium",
+          "region": "EU",
+          "acknowledged": true
+        },
+        {
+          "event_id": "probe-1",
+          "severity": "medium",
+          "region": "EU",
+          "acknowledged": true
+        },
+        {
+          "event_id": "low-1",
+          "severity": "low",
+          "region": "US",
+          "acknowledged": true
+        }
+      ]
+    },
+    "no_retry": {
+      "variant": "scn-5014",
+      "events": [
+        {
+          "event_id": "probe-1",
+          "severity": "critical",
+          "region": "US",
+          "acknowledged": false
+        },
+        {
+          "event_id": "low-1",
+          "severity": "low",
+          "region": "US",
+          "acknowledged": true
+        }
+      ]
+    },
+    "escalate_high": {
+      "variant": "scn-5020",
+      "events": [
+        {
+          "event_id": "probe-1",
+          "severity": "high",
+          "region": "EU",
+          "acknowledged": true
+        },
+        {
+          "event_id": "low-1",
+          "severity": "low",
+          "region": "US",
+          "acknowledged": true
+        },
+        {
+          "event_id": "probe-1",
+          "severity": "high",
+          "region": "EU",
+          "acknowledged": true
+        }
+      ]
+    },
+    "us_ack_ignored": {
+      "variant": "scn-5028",
+      "events": [
+        {
+          "event_id": "probe-1",
+          "severity": "high",
+          "region": "US",
+          "acknowledged": false
+        },
+        {
+          "event_id": "crit-2",
+          "severity": "critical",
+          "region": "US",
+          "acknowledged": false
+        }
+      ]
+    }
+  }
+}

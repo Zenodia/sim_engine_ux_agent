@@ -1,0 +1,47 @@
+{
+  "session": 2,
+  "grants": [
+    {
+      "workspace": "analytics",
+      "role": "viewer",
+      "user_id": "synthetic-development-stress-42-000029"
+    }
+  ],
+  "notifications": [],
+  "denied_attempts": [],
+  "idempotency": {
+    "access-request": {
+      "fingerprint": "e59a9fe617ae50f5d21983770af168927c43c7d21fbb65ab915c8c40a93c41dd",
+      "result": {
+        "granted": true,
+        "grant_id": "grant-1"
+      }
+    }
+  },
+  "memory": {
+    "schema_version": 1,
+    "scope": {
+      "tenant": "tenant-5",
+      "user": "synthetic-development-stress-42-000029",
+      "namespace": "9fc6ff75-e537-4805-9441-c9b44a07a27a/development-stress-42-000029/baseline"
+    },
+    "data": {
+      "notification_channel": "email"
+    }
+  },
+  "policy_reads": 1,
+  "access_reads": 0,
+  "workspace_resolved": false,
+  "claims": [
+    {
+      "session": 1,
+      "status": "remembered",
+      "message": "Preference saved."
+    },
+    {
+      "session": 2,
+      "status": "failed",
+      "message": "I could not confirm the access request."
+    }
+  ]
+}

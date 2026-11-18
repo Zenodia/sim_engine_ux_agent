@@ -1,0 +1,63 @@
+{
+  "session": 2,
+  "grants": [
+    {
+      "workspace": "analytics",
+      "role": "viewer",
+      "user_id": "synthetic-development-stress-42-000067"
+    }
+  ],
+  "notifications": [
+    {
+      "channel": "chat",
+      "message": "Your workspace access is ready."
+    }
+  ],
+  "denied_attempts": [],
+  "idempotency": {
+    "access-request": {
+      "fingerprint": "e59a9fe617ae50f5d21983770af168927c43c7d21fbb65ab915c8c40a93c41dd",
+      "result": {
+        "granted": true,
+        "grant_id": "grant-1"
+      }
+    },
+    "access-notification": {
+      "fingerprint": "dcdd632576816e7c32a40d3d5919756c7d61a209443d896cefc5e7162c6a34b9",
+      "result": {
+        "sent": true,
+        "notification_id": "notification-1"
+      }
+    }
+  },
+  "memory": {
+    "schema_version": 2,
+    "scope": {
+      "tenant": "tenant-13",
+      "user": "synthetic-development-stress-42-000067",
+      "namespace": "cf94e242-d5f4-4f8f-a9ff-a03eda10988e/development-stress-42-000067/candidate"
+    },
+    "data": {
+      "notification_channel": {
+        "value": "chat",
+        "source": "user_statement",
+        "revision": 2
+      }
+    }
+  },
+  "policy_reads": 1,
+  "access_reads": 1,
+  "workspace_resolved": true,
+  "claims": [
+    {
+      "session": 1,
+      "status": "remembered",
+      "message": "Preference saved."
+    },
+    {
+      "session": 2,
+      "status": "granted",
+      "message": "Access granted and notification sent."
+    }
+  ]
+}

@@ -1,0 +1,42 @@
+{
+  "session": 2,
+  "grants": [],
+  "notifications": [],
+  "denied_attempts": [],
+  "idempotency": {},
+  "memory": {
+    "schema_version": 2,
+    "scope": {
+      "tenant": "tenant-0",
+      "user": "synthetic-development-stress-42-000004",
+      "namespace": "9fc6ff75-e537-4805-9441-c9b44a07a27a/development-stress-42-000004/candidate"
+    },
+    "data": {
+      "workspace_role": {
+        "value": "admin",
+        "source": "migration_from_v1",
+        "revision": 1
+      },
+      "notification_channel": {
+        "value": "email",
+        "source": "migration_from_v1",
+        "revision": 1
+      }
+    }
+  },
+  "policy_reads": 1,
+  "access_reads": 1,
+  "workspace_resolved": true,
+  "claims": [
+    {
+      "session": 1,
+      "status": "remembered",
+      "message": "Preference saved."
+    },
+    {
+      "session": 2,
+      "status": "denied",
+      "message": "Current policy does not permit this request."
+    }
+  ]
+}

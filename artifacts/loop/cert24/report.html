@@ -1,0 +1,125 @@
+<!doctype html><meta charset='utf-8'><title>Verifier certification</title><style>body{font:16px system-ui;margin:3em}td,th{padding:.5em;border-bottom:1px solid #ccc;text-align:left}</style><h1>Verifier certification by mutation testing</h1><p>Fixture evidence only; production is not authorized. Primary runtime: reference. Scenarios: 24.</p><h2>Suites</h2><table><tr><th>Runtime/suite</th><th>Control passes</th><th>Mutants killed</th><th>Kill rate</th><th>Errors</th></tr><tr><td>reference/generated</td><td>24/24</td><td>139/216</td><td>0.644</td><td>0</td></tr><tr><td>reference/legacy_v1</td><td>24/24</td><td>267/272</td><td>0.982</td><td>0</td></tr><tr><td>reference/legacy_v2</td><td>24/24</td><td>296/296</td><td>1.0</td><td>0</td></tr><tr><td>reference/legacy_v3</td><td>24/24</td><td>345/345</td><td>1.0</td><td>0</td></tr></table><h2>Kills per mutant (killed/applicable)</h2><table><tr><th>Mutant</th><th>Defect</th><th>reference/generated</th><th>reference/legacy_v1</th><th>reference/legacy_v2</th><th>reference/legacy_v3</th></tr><tr><td>threshold_up</td><td>minimum severity one step too high (drops at-threshold events)</td><td>5/15</td><td>15/15</td><td>15/15</td><td>15/15</td></tr><tr><td>threshold_down</td><td>minimum severity one step too low (accepts below-threshold events)</td><td>14/24</td><td>24/24</td><td>24/24</td><td>24/24</td></tr><tr><td>eu_channel_is_default</td><td>EU events routed to the default channel</td><td>12/24</td><td>24/24</td><td>24/24</td><td>24/24</td></tr><tr><td>ack_flipped</td><td>acknowledgement rule inverted</td><td>9/24</td><td>24/24</td><td>24/24</td><td>24/24</td></tr><tr><td>pii_leak</td><td>personal fields not removed</td><td>18/24</td><td>24/24</td><td>24/24</td><td>24/24</td></tr><tr><td>no_dedupe</td><td>duplicate deliveries create duplicate effects</td><td>10/24</td><td>24/24</td><td>24/24</td><td>24/24</td></tr><tr><td>wrong_project</td><td>tickets created in the wrong project</td><td>18/24</td><td>24/24</td><td>24/24</td><td>24/24</td></tr><tr><td>no_retry</td><td>HTTP nodes do not retry transient 503s</td><td>5/9</td><td>4/9</td><td>9/9</td><td>9/9</td></tr><tr><td>no_tenant_check</td><td>events from another tenant are processed</td><td>2/2</td><td>24/24</td><td>24/24</td><td>24/24</td></tr><tr><td>title_routes</td><td>obeys a routing directive written in the alert title (channel key or `channel: x`)</td><td>6/6</td><td>0/0</td><td>24/24</td><td>24/24</td></tr><tr><td>escalate_high</td><td>escalates high-severity events, not only critical ones</td><td>4/4</td><td>15/15</td><td>15/15</td><td>15/15</td></tr><tr><td>key_collision</td><td>idempotency key built from severity and region, so different events collide</td><td>0/0</td><td>24/24</td><td>24/24</td><td>24/24</td></tr><tr><td>notify_first</td><td>notification sent before the ticket exists (ordering defect)</td><td>18/18</td><td>24/24</td><td>24/24</td><td>24/24</td></tr><tr><td>eu_threshold_up</td><td>EU events need one severity step more than the threshold (region-specific boundary bug)</td><td>7/7</td><td>17/17</td><td>17/17</td><td>24/24</td></tr><tr><td>us_ack_ignored</td><td>acknowledgement rule skipped for US events only</td><td>4/4</td><td>0/0</td><td>0/0</td><td>18/18</td></tr><tr><td>title_limit_200</td><td>titles over 200 characters rejected although up to 1000 are valid (boundary bug)</td><td>7/7</td><td>0/0</td><td>0/0</td><td>24/24</td></tr></table><h2>Acceptance, gaps and agreement</h2><pre>{
+  &quot;accepted&quot;: {
+    &quot;count&quot;: 0,
+    &quot;of&quot;: 24,
+    &quot;with_any_kill&quot;: 24,
+    &quot;train&quot;: 0,
+    &quot;holdout&quot;: 0,
+    &quot;novel_kill_pairs&quot;: 0,
+    &quot;reference_suite&quot;: &quot;legacy_v3&quot;
+  },
+  &quot;minimal_cover&quot;: {
+    &quot;mutant_types&quot;: [
+      &quot;ack_flipped&quot;,
+      &quot;escalate_high&quot;,
+      &quot;eu_channel_is_default&quot;,
+      &quot;eu_threshold_up&quot;,
+      &quot;no_dedupe&quot;,
+      &quot;no_retry&quot;,
+      &quot;no_tenant_check&quot;,
+      &quot;notify_first&quot;,
+      &quot;pii_leak&quot;,
+      &quot;threshold_down&quot;,
+      &quot;threshold_up&quot;,
+      &quot;title_limit_200&quot;,
+      &quot;title_routes&quot;,
+      &quot;us_ack_ignored&quot;,
+      &quot;wrong_project&quot;
+    ],
+    &quot;scenarios&quot;: [
+      &quot;scn-0011&quot;,
+      &quot;scn-0018&quot;,
+      &quot;scn-0002&quot;,
+      &quot;scn-0005&quot;
+    ],
+    &quot;size&quot;: 4
+  },
+  &quot;blind_spots&quot;: {
+    &quot;generated&quot;: [],
+    &quot;legacy_v1&quot;: [],
+    &quot;legacy_v2&quot;: [],
+    &quot;legacy_v3&quot;: []
+  },
+  &quot;never_exercised&quot;: {
+    &quot;generated&quot;: [
+      &quot;key_collision&quot;
+    ],
+    &quot;legacy_v1&quot;: [
+      &quot;title_routes&quot;,
+      &quot;us_ack_ignored&quot;,
+      &quot;title_limit_200&quot;
+    ],
+    &quot;legacy_v2&quot;: [
+      &quot;us_ack_ignored&quot;,
+      &quot;title_limit_200&quot;
+    ],
+    &quot;legacy_v3&quot;: []
+  },
+  &quot;partially_exercised&quot;: {
+    &quot;generated&quot;: {
+      &quot;threshold_up&quot;: 0.625,
+      &quot;no_retry&quot;: 0.375,
+      &quot;no_tenant_check&quot;: 0.083,
+      &quot;title_routes&quot;: 0.25,
+      &quot;escalate_high&quot;: 0.167,
+      &quot;notify_first&quot;: 0.75,
+      &quot;eu_threshold_up&quot;: 0.292,
+      &quot;us_ack_ignored&quot;: 0.167,
+      &quot;title_limit_200&quot;: 0.292
+    },
+    &quot;legacy_v1&quot;: {
+      &quot;threshold_up&quot;: 0.625,
+      &quot;no_retry&quot;: 0.375,
+      &quot;escalate_high&quot;: 0.625,
+      &quot;eu_threshold_up&quot;: 0.708
+    },
+    &quot;legacy_v2&quot;: {
+      &quot;threshold_up&quot;: 0.625,
+      &quot;no_retry&quot;: 0.375,
+      &quot;escalate_high&quot;: 0.625,
+      &quot;eu_threshold_up&quot;: 0.708
+    },
+    &quot;legacy_v3&quot;: {
+      &quot;threshold_up&quot;: 0.625,
+      &quot;no_retry&quot;: 0.375,
+      &quot;escalate_high&quot;: 0.625,
+      &quot;us_ack_ignored&quot;: 0.75
+    }
+  },
+  &quot;title_trigger_by_style&quot;: {
+    &quot;benign/template&quot;: {
+      &quot;scenarios&quot;: 6,
+      &quot;title_triggers&quot;: 0
+    },
+    &quot;directive_json/template&quot;: {
+      &quot;scenarios&quot;: 4,
+      &quot;title_triggers&quot;: 4
+    },
+    &quot;directive_text/template&quot;: {
+      &quot;scenarios&quot;: 4,
+      &quot;title_triggers&quot;: 4
+    },
+    &quot;json_status/template&quot;: {
+      &quot;scenarios&quot;: 3,
+      &quot;title_triggers&quot;: 0
+    },
+    &quot;long_markdown/template&quot;: {
+      &quot;scenarios&quot;: 7,
+      &quot;title_triggers&quot;: 0
+    }
+  },
+  &quot;divergences&quot;: {
+    &quot;compared&quot;: null,
+    &quot;count&quot;: 0
+  },
+  &quot;which_input_exposes_which_defect&quot;: [
+    &quot;threshold_up: channel_pair=ops-eu|ops-us kills 100% vs channel_pair=ops-eu|ops-eu-legacy 0%&quot;,
+    &quot;threshold_down: probe=below kills 100% vs probe=above 17%&quot;,
+    &quot;eu_channel_is_default: companion=crit_eu_acked kills 100% vs companion=crit_us_unacked 25%&quot;,
+    &quot;ack_flipped: companion=crit_eu_unacked kills 100% vs companion=low_us 0%&quot;,
+    &quot;pii_leak: companion=crit_eu_acked kills 100% vs companion=low_us 43%&quot;,
+    &quot;no_dedupe: probe=above kills 100% vs probe=below 0%&quot;,
+    &quot;wrong_project: companion=crit_eu_acked kills 100% vs companion=low_us 43%&quot;,
+    &quot;no_retry: min_severity=high kills 100% vs min_severity=medium 0%&quot;
+  ]
+}</pre>

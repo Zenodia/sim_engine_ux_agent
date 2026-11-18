@@ -1,0 +1,12 @@
+{
+  "schema_version": 1,
+  "rows": 100,
+  "dataset_sha256": "6fcfe244208ceb0303a825478e6a24e2df06084923c22a2237e82b2a3a9b5db6",
+  "splits": [
+    "development"
+  ],
+  "suites": [
+    "stress"
+  ],
+  "note": "Contains simulator-only fields. Do not send entire rows to the agent."
+}

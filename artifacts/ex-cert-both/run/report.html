@@ -1,0 +1,48 @@
+<!doctype html><meta charset='utf-8'><title>Verifier certification</title><style>body{font:16px system-ui;margin:3em}td,th{padding:.5em;border-bottom:1px solid #ccc;text-align:left}</style><h1>Verifier certification by mutation testing</h1><p>Fixture evidence only; production is not authorized. Primary runtime: n8n. Scenarios: 6.</p><h2>Suites</h2><table><tr><th>Runtime/suite</th><th>Control passes</th><th>Mutants killed</th><th>Kill rate</th><th>Errors</th></tr><tr><td>n8n/legacy</td><td>6/6</td><td>46/49</td><td>0.939</td><td>0</td></tr><tr><td>n8n/generated</td><td>6/6</td><td>27/42</td><td>0.643</td><td>0</td></tr><tr><td>reference/legacy</td><td>6/6</td><td>46/49</td><td>0.939</td><td>0</td></tr><tr><td>reference/generated</td><td>6/6</td><td>27/42</td><td>0.643</td><td>0</td></tr></table><h2>Kills per mutant (killed/applicable)</h2><table><tr><th>Mutant</th><th>Defect</th><th>n8n/legacy</th><th>n8n/generated</th><th>reference/legacy</th><th>reference/generated</th></tr><tr><td>threshold_up</td><td>minimum severity one step too high (drops at-threshold events)</td><td>3/3</td><td>2/3</td><td>3/3</td><td>2/3</td></tr><tr><td>threshold_down</td><td>minimum severity one step too low (accepts below-threshold events)</td><td>6/6</td><td>2/6</td><td>6/6</td><td>2/6</td></tr><tr><td>eu_channel_is_default</td><td>EU events routed to the default channel</td><td>6/6</td><td>4/6</td><td>6/6</td><td>4/6</td></tr><tr><td>ack_flipped</td><td>acknowledgement rule inverted</td><td>6/6</td><td>4/6</td><td>6/6</td><td>4/6</td></tr><tr><td>pii_leak</td><td>personal fields not removed</td><td>6/6</td><td>5/6</td><td>6/6</td><td>5/6</td></tr><tr><td>no_dedupe</td><td>duplicate deliveries create duplicate effects</td><td>6/6</td><td>3/6</td><td>6/6</td><td>3/6</td></tr><tr><td>no_retry</td><td>HTTP nodes do not retry transient 503s</td><td>1/4</td><td>2/4</td><td>1/4</td><td>2/4</td></tr><tr><td>no_tenant_check</td><td>events from another tenant are processed</td><td>6/6</td><td>3/3</td><td>6/6</td><td>3/3</td></tr><tr><td>title_routes</td><td>obeys instructions embedded in the alert title (routes to an external sink)</td><td>6/6</td><td>2/2</td><td>6/6</td><td>2/2</td></tr></table><h2>Acceptance and agreement</h2><pre>{
+  &quot;accepted&quot;: {
+    &quot;count&quot;: 1,
+    &quot;of&quot;: 6,
+    &quot;with_any_kill&quot;: 6,
+    &quot;train&quot;: 0,
+    &quot;holdout&quot;: 1,
+    &quot;novel_kill_pairs&quot;: 1
+  },
+  &quot;minimal_cover&quot;: {
+    &quot;mutant_types&quot;: [
+      &quot;ack_flipped&quot;,
+      &quot;eu_channel_is_default&quot;,
+      &quot;no_dedupe&quot;,
+      &quot;no_retry&quot;,
+      &quot;no_tenant_check&quot;,
+      &quot;pii_leak&quot;,
+      &quot;threshold_down&quot;,
+      &quot;threshold_up&quot;,
+      &quot;title_routes&quot;
+    ],
+    &quot;scenarios&quot;: [
+      &quot;scn-0005&quot;,
+      &quot;scn-0003&quot;
+    ],
+    &quot;size&quot;: 2
+  },
+  &quot;title_trigger_by_style&quot;: {
+    &quot;benign/template&quot;: {
+      &quot;scenarios&quot;: 1,
+      &quot;title_triggers&quot;: 0
+    },
+    &quot;instruction_injection/template&quot;: {
+      &quot;scenarios&quot;: 2,
+      &quot;title_triggers&quot;: 2
+    },
+    &quot;long_markdown/template&quot;: {
+      &quot;scenarios&quot;: 3,
+      &quot;title_triggers&quot;: 0
+    }
+  },
+  &quot;divergences&quot;: {
+    &quot;compared&quot;: 103,
+    &quot;count&quot;: 0
+  },
+  &quot;blind_spots_generated&quot;: [],
+  &quot;blind_spots_legacy&quot;: []
+}</pre>

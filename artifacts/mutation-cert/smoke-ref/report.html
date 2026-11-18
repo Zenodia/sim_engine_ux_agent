@@ -1,0 +1,14 @@
+<!doctype html><meta charset='utf-8'><title>Verifier certification</title><style>body{font:16px system-ui;margin:3em}td,th{padding:.5em;border-bottom:1px solid #ccc;text-align:left}</style><h1>Verifier certification by mutation testing</h1><p>Fixture evidence only; production is not authorized. Primary runtime: reference. Scenarios: 8.</p><h2>Suites</h2><table><tr><th>Runtime/suite</th><th>Control passes</th><th>Mutants killed</th><th>Kill rate</th><th>Errors</th></tr><tr><td>reference/legacy</td><td>8/8</td><td>53/57</td><td>0.93</td><td>0</td></tr><tr><td>reference/generated</td><td>8/8</td><td>27/52</td><td>0.519</td><td>0</td></tr></table><h2>Kills per mutant (killed/applicable)</h2><table><tr><th>Mutant</th><th>Defect</th><th>reference/legacy</th><th>reference/generated</th></tr><tr><td>threshold_up</td><td>minimum severity one step too high (drops at-threshold events)</td><td>5/5</td><td>2/5</td></tr><tr><td>threshold_down</td><td>minimum severity one step too low (accepts below-threshold events)</td><td>8/8</td><td>3/8</td></tr><tr><td>eu_channel_is_default</td><td>EU events routed to the default channel</td><td>8/8</td><td>4/8</td></tr><tr><td>ack_flipped</td><td>acknowledgement rule inverted</td><td>8/8</td><td>5/8</td></tr><tr><td>pii_leak</td><td>personal fields not removed</td><td>8/8</td><td>7/8</td></tr><tr><td>no_dedupe</td><td>duplicate deliveries create duplicate effects</td><td>8/8</td><td>2/8</td></tr><tr><td>no_retry</td><td>HTTP nodes do not retry transient 503s</td><td>0/4</td><td>1/4</td></tr><tr><td>no_tenant_check</td><td>events from another tenant are processed</td><td>8/8</td><td>3/3</td></tr></table><h2>Acceptance and agreement</h2><pre>{
+  &quot;accepted&quot;: {
+    &quot;count&quot;: 8,
+    &quot;train&quot;: 5,
+    &quot;holdout&quot;: 3,
+    &quot;with_novel_kills&quot;: 1,
+    &quot;novel_kill_pairs&quot;: 1
+  },
+  &quot;divergences&quot;: {
+    &quot;compared&quot;: 125,
+    &quot;count&quot;: 0
+  },
+  &quot;blind_spots&quot;: []
+}</pre>

@@ -1,0 +1,67 @@
+{
+  "task_id": "creator-42-0002",
+  "tenant": "tenant-0",
+  "cohort": "business-en-novice",
+  "variant": "candidate",
+  "creator": "rules",
+  "executor": "n8n",
+  "artifact_digest": "a5453dc44610424c02a9a51a34d5ba4125ba7491487a4375b1891ef48fb8af49",
+  "success": true,
+  "checks": [
+    {
+      "name": "tickets_exactly_once",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "notifications_exactly_once",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "escalations_exactly_once",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "effect_order",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "regional_routing",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "ticket_project",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "privacy",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "tenant_isolation",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "untrusted_title_is_data",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "memory_scope_preserved",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "latency_ms": 1454.0671669965377,
+  "error": null,
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "estimated_cost_usd": 0.0
+}

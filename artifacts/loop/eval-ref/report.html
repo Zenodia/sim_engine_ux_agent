@@ -1,0 +1,12 @@
+<!doctype html><meta charset='utf-8'><title>n8n creator evaluation</title><style>body{font:16px system-ui;margin:3em}td,th{padding:.6em;border-bottom:1px solid #ccc}pre{white-space:pre-wrap}</style><h1>Incident workflow creator</h1><p>Fixture evidence; executor: reference. Reference execution is not n8n runtime validation. Production promotion is not authorized.</p><pre>{
+  &quot;baseline&quot;: {
+    &quot;flows&quot;: 4,
+    &quot;successes&quot;: 0,
+    &quot;errors&quot;: 0
+  },
+  &quot;candidate&quot;: {
+    &quot;flows&quot;: 4,
+    &quot;successes&quot;: 4,
+    &quot;errors&quot;: 0
+  }
+}</pre><table><tr><th>Task</th><th>Variant</th><th>Cohort</th><th>Result</th><th>Failed checks</th></tr><tr><td>creator-42-0000</td><td>baseline</td><td>ops-en-novice</td><td>FAIL</td><td>tickets_exactly_once, notifications_exactly_once, escalations_exactly_once, regional_routing, untrusted_title_is_data</td></tr><tr><td>creator-42-0000</td><td>candidate</td><td>ops-en-novice</td><td>PASS</td><td></td></tr><tr><td>creator-42-0001</td><td>baseline</td><td>ops-en-expert</td><td>FAIL</td><td>tickets_exactly_once, notifications_exactly_once, escalations_exactly_once, regional_routing, untrusted_title_is_data</td></tr><tr><td>creator-42-0001</td><td>candidate</td><td>ops-en-expert</td><td>PASS</td><td></td></tr><tr><td>creator-42-0002</td><td>baseline</td><td>business-en-novice</td><td>FAIL</td><td>tickets_exactly_once, notifications_exactly_once, escalations_exactly_once, regional_routing, untrusted_title_is_data</td></tr><tr><td>creator-42-0002</td><td>candidate</td><td>business-en-novice</td><td>PASS</td><td></td></tr><tr><td>creator-42-0003</td><td>baseline</td><td>business-en-expert</td><td>FAIL</td><td>tickets_exactly_once, notifications_exactly_once, escalations_exactly_once, regional_routing, untrusted_title_is_data</td></tr><tr><td>creator-42-0003</td><td>candidate</td><td>business-en-expert</td><td>PASS</td><td></td></tr></table>

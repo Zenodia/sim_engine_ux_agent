@@ -1,0 +1,2799 @@
+{
+  "runtimes": [
+    "reference"
+  ],
+  "primary_runtime": "reference",
+  "scenarios": 24,
+  "suites": {
+    "reference/generated": {
+      "control_pass": 24,
+      "control_total": 24,
+      "applicable_mutants": 221,
+      "killed": 143,
+      "kill_rate": 0.647,
+      "errors": 0,
+      "per_mutant": {
+        "threshold_up": {
+          "applicable": 17,
+          "killed": 6,
+          "errors": 0,
+          "kill_rate": 0.353,
+          "exercised": 0.708
+        },
+        "threshold_down": {
+          "applicable": 24,
+          "killed": 9,
+          "errors": 0,
+          "kill_rate": 0.375,
+          "exercised": 1.0
+        },
+        "eu_channel_is_default": {
+          "applicable": 24,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 0.5,
+          "exercised": 1.0
+        },
+        "ack_flipped": {
+          "applicable": 24,
+          "killed": 13,
+          "errors": 0,
+          "kill_rate": 0.542,
+          "exercised": 1.0
+        },
+        "pii_leak": {
+          "applicable": 24,
+          "killed": 18,
+          "errors": 0,
+          "kill_rate": 0.75,
+          "exercised": 1.0
+        },
+        "no_dedupe": {
+          "applicable": 24,
+          "killed": 13,
+          "errors": 0,
+          "kill_rate": 0.542,
+          "exercised": 1.0
+        },
+        "wrong_project": {
+          "applicable": 24,
+          "killed": 18,
+          "errors": 0,
+          "kill_rate": 0.75,
+          "exercised": 1.0
+        },
+        "no_retry": {
+          "applicable": 13,
+          "killed": 7,
+          "errors": 0,
+          "kill_rate": 0.538,
+          "exercised": 0.542
+        },
+        "no_tenant_check": {
+          "applicable": 7,
+          "killed": 7,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.292
+        },
+        "title_routes": {
+          "applicable": 0,
+          "killed": 0,
+          "errors": 0,
+          "kill_rate": null,
+          "exercised": 0.0
+        },
+        "escalate_high": {
+          "applicable": 5,
+          "killed": 5,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.208
+        },
+        "key_collision": {
+          "applicable": 2,
+          "killed": 2,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.083
+        },
+        "notify_first": {
+          "applicable": 18,
+          "killed": 18,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.75
+        },
+        "eu_threshold_up": {
+          "applicable": 7,
+          "killed": 7,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.292
+        },
+        "us_ack_ignored": {
+          "applicable": 5,
+          "killed": 5,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.208
+        },
+        "title_limit_200": {
+          "applicable": 3,
+          "killed": 3,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.125
+        }
+      }
+    },
+    "reference/legacy_v1": {
+      "control_pass": 24,
+      "control_total": 24,
+      "applicable_mutants": 276,
+      "killed": 267,
+      "kill_rate": 0.967,
+      "errors": 0,
+      "per_mutant": {
+        "threshold_up": {
+          "applicable": 17,
+          "killed": 17,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.708
+        },
+        "threshold_down": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "eu_channel_is_default": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "ack_flipped": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "pii_leak": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "no_dedupe": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "wrong_project": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "no_retry": {
+          "applicable": 13,
+          "killed": 4,
+          "errors": 0,
+          "kill_rate": 0.308,
+          "exercised": 0.542
+        },
+        "no_tenant_check": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "title_routes": {
+          "applicable": 0,
+          "killed": 0,
+          "errors": 0,
+          "kill_rate": null,
+          "exercised": 0.0
+        },
+        "escalate_high": {
+          "applicable": 17,
+          "killed": 17,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.708
+        },
+        "key_collision": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "notify_first": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "eu_threshold_up": {
+          "applicable": 13,
+          "killed": 13,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.542
+        },
+        "us_ack_ignored": {
+          "applicable": 0,
+          "killed": 0,
+          "errors": 0,
+          "kill_rate": null,
+          "exercised": 0.0
+        },
+        "title_limit_200": {
+          "applicable": 0,
+          "killed": 0,
+          "errors": 0,
+          "kill_rate": null,
+          "exercised": 0.0
+        }
+      }
+    },
+    "reference/legacy_v2": {
+      "control_pass": 24,
+      "control_total": 24,
+      "applicable_mutants": 300,
+      "killed": 300,
+      "kill_rate": 1.0,
+      "errors": 0,
+      "per_mutant": {
+        "threshold_up": {
+          "applicable": 17,
+          "killed": 17,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.708
+        },
+        "threshold_down": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "eu_channel_is_default": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "ack_flipped": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "pii_leak": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "no_dedupe": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "wrong_project": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "no_retry": {
+          "applicable": 13,
+          "killed": 13,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.542
+        },
+        "no_tenant_check": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "title_routes": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "escalate_high": {
+          "applicable": 17,
+          "killed": 17,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.708
+        },
+        "key_collision": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "notify_first": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "eu_threshold_up": {
+          "applicable": 13,
+          "killed": 13,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.542
+        },
+        "us_ack_ignored": {
+          "applicable": 0,
+          "killed": 0,
+          "errors": 0,
+          "kill_rate": null,
+          "exercised": 0.0
+        },
+        "title_limit_200": {
+          "applicable": 0,
+          "killed": 0,
+          "errors": 0,
+          "kill_rate": null,
+          "exercised": 0.0
+        }
+      }
+    },
+    "reference/legacy_v3": {
+      "control_pass": 24,
+      "control_total": 24,
+      "applicable_mutants": 346,
+      "killed": 346,
+      "kill_rate": 1.0,
+      "errors": 0,
+      "per_mutant": {
+        "threshold_up": {
+          "applicable": 17,
+          "killed": 17,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.708
+        },
+        "threshold_down": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "eu_channel_is_default": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "ack_flipped": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "pii_leak": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "no_dedupe": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "wrong_project": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "no_retry": {
+          "applicable": 13,
+          "killed": 13,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.542
+        },
+        "no_tenant_check": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "title_routes": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "escalate_high": {
+          "applicable": 17,
+          "killed": 17,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.708
+        },
+        "key_collision": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "notify_first": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "eu_threshold_up": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        },
+        "us_ack_ignored": {
+          "applicable": 11,
+          "killed": 11,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 0.458
+        },
+        "title_limit_200": {
+          "applicable": 24,
+          "killed": 24,
+          "errors": 0,
+          "kill_rate": 1.0,
+          "exercised": 1.0
+        }
+      }
+    }
+  },
+  "blind_spots": {
+    "generated": [],
+    "legacy_v1": [],
+    "legacy_v2": [],
+    "legacy_v3": []
+  },
+  "never_exercised": {
+    "generated": [
+      "title_routes"
+    ],
+    "legacy_v1": [
+      "title_routes",
+      "us_ack_ignored",
+      "title_limit_200"
+    ],
+    "legacy_v2": [
+      "us_ack_ignored",
+      "title_limit_200"
+    ],
+    "legacy_v3": []
+  },
+  "partially_exercised": {
+    "generated": {
+      "threshold_up": 0.708,
+      "no_retry": 0.542,
+      "no_tenant_check": 0.292,
+      "escalate_high": 0.208,
+      "key_collision": 0.083,
+      "notify_first": 0.75,
+      "eu_threshold_up": 0.292,
+      "us_ack_ignored": 0.208,
+      "title_limit_200": 0.125
+    },
+    "legacy_v1": {
+      "threshold_up": 0.708,
+      "no_retry": 0.542,
+      "escalate_high": 0.708,
+      "eu_threshold_up": 0.542
+    },
+    "legacy_v2": {
+      "threshold_up": 0.708,
+      "no_retry": 0.542,
+      "escalate_high": 0.708,
+      "eu_threshold_up": 0.542
+    },
+    "legacy_v3": {
+      "threshold_up": 0.708,
+      "no_retry": 0.542,
+      "escalate_high": 0.708,
+      "us_ack_ignored": 0.458
+    }
+  },
+  "accepted": {
+    "count": 0,
+    "of": 24,
+    "with_any_kill": 24,
+    "train": 0,
+    "holdout": 0,
+    "novel_kill_pairs": 0,
+    "reference_suite": "legacy_v3",
+    "items": []
+  },
+  "minimal_cover": {
+    "mutant_types": [
+      "ack_flipped",
+      "escalate_high",
+      "eu_channel_is_default",
+      "eu_threshold_up",
+      "key_collision",
+      "no_dedupe",
+      "no_retry",
+      "no_tenant_check",
+      "notify_first",
+      "pii_leak",
+      "threshold_down",
+      "threshold_up",
+      "title_limit_200",
+      "us_ack_ignored",
+      "wrong_project"
+    ],
+    "scenarios": [
+      "scn-0017",
+      "scn-0021",
+      "scn-0002",
+      "scn-0009"
+    ],
+    "size": 4
+  },
+  "title_trigger_by_style": {
+    "benign/llm": {
+      "scenarios": 8,
+      "title_triggers": 0
+    },
+    "embedded_json/llm": {
+      "scenarios": 7,
+      "title_triggers": 0
+    },
+    "instruction_injection/llm": {
+      "scenarios": 3,
+      "title_triggers": 0
+    },
+    "long_markdown/llm": {
+      "scenarios": 6,
+      "title_triggers": 0
+    }
+  },
+  "dimension_effects": {
+    "threshold_up": {
+      "min_severity": {
+        "high": [
+          4,
+          11
+        ],
+        "medium": [
+          2,
+          6
+        ]
+      },
+      "ack_required": {
+        "False": [
+          4,
+          9
+        ],
+        "True": [
+          2,
+          8
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          0,
+          2
+        ],
+        "ops-eu-legacy|ops-eu": [
+          2,
+          4
+        ],
+        "ops-eu|ops-eu-legacy": [
+          3,
+          7
+        ],
+        "ops-eu|ops-us": [
+          1,
+          4
+        ]
+      },
+      "fault": {
+        "both": [
+          1,
+          3
+        ],
+        "none": [
+          3,
+          8
+        ],
+        "notification_503": [
+          1,
+          4
+        ],
+        "ticket_after_commit": [
+          1,
+          2
+        ]
+      },
+      "probe": {
+        "above": [
+          0,
+          6
+        ],
+        "at": [
+          6,
+          6
+        ],
+        "below": [
+          0,
+          5
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          4,
+          9
+        ],
+        "US": [
+          2,
+          8
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          5,
+          11
+        ],
+        "True": [
+          1,
+          6
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          4,
+          9
+        ],
+        "immediate": [
+          1,
+          5
+        ],
+        "none": [
+          1,
+          3
+        ]
+      },
+      "distractor": {
+        "False": [
+          4,
+          11
+        ],
+        "True": [
+          2,
+          6
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          0,
+          3
+        ],
+        "crit_eu_unacked": [
+          1,
+          2
+        ],
+        "crit_us_unacked": [
+          3,
+          5
+        ],
+        "low_us": [
+          1,
+          4
+        ],
+        "none": [
+          1,
+          3
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          0,
+          5
+        ],
+        "embedded_json": [
+          3,
+          5
+        ],
+        "instruction_injection": [
+          2,
+          3
+        ],
+        "long_markdown": [
+          1,
+          4
+        ]
+      }
+    },
+    "threshold_down": {
+      "min_severity": {
+        "critical": [
+          3,
+          7
+        ],
+        "high": [
+          4,
+          11
+        ],
+        "medium": [
+          2,
+          6
+        ]
+      },
+      "ack_required": {
+        "False": [
+          6,
+          13
+        ],
+        "True": [
+          3,
+          11
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          1,
+          3
+        ],
+        "ops-eu-legacy|ops-eu": [
+          3,
+          8
+        ],
+        "ops-eu|ops-eu-legacy": [
+          4,
+          9
+        ],
+        "ops-eu|ops-us": [
+          1,
+          4
+        ]
+      },
+      "fault": {
+        "both": [
+          1,
+          4
+        ],
+        "none": [
+          4,
+          11
+        ],
+        "notification_503": [
+          4,
+          6
+        ],
+        "ticket_after_commit": [
+          0,
+          3
+        ]
+      },
+      "probe": {
+        "above": [
+          0,
+          8
+        ],
+        "at": [
+          1,
+          8
+        ],
+        "below": [
+          8,
+          8
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          6,
+          12
+        ],
+        "US": [
+          3,
+          12
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          5,
+          15
+        ],
+        "True": [
+          4,
+          9
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          4,
+          12
+        ],
+        "immediate": [
+          3,
+          8
+        ],
+        "none": [
+          2,
+          4
+        ]
+      },
+      "distractor": {
+        "False": [
+          5,
+          17
+        ],
+        "True": [
+          4,
+          7
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          0,
+          4
+        ],
+        "crit_eu_unacked": [
+          0,
+          3
+        ],
+        "crit_us_unacked": [
+          2,
+          6
+        ],
+        "low_us": [
+          4,
+          5
+        ],
+        "none": [
+          3,
+          6
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          3,
+          8
+        ],
+        "embedded_json": [
+          3,
+          7
+        ],
+        "instruction_injection": [
+          0,
+          3
+        ],
+        "long_markdown": [
+          3,
+          6
+        ]
+      }
+    },
+    "eu_channel_is_default": {
+      "min_severity": {
+        "critical": [
+          3,
+          7
+        ],
+        "high": [
+          6,
+          11
+        ],
+        "medium": [
+          3,
+          6
+        ]
+      },
+      "ack_required": {
+        "False": [
+          7,
+          13
+        ],
+        "True": [
+          5,
+          11
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          2,
+          3
+        ],
+        "ops-eu-legacy|ops-eu": [
+          4,
+          8
+        ],
+        "ops-eu|ops-eu-legacy": [
+          3,
+          9
+        ],
+        "ops-eu|ops-us": [
+          3,
+          4
+        ]
+      },
+      "fault": {
+        "both": [
+          4,
+          4
+        ],
+        "none": [
+          6,
+          11
+        ],
+        "notification_503": [
+          1,
+          6
+        ],
+        "ticket_after_commit": [
+          1,
+          3
+        ]
+      },
+      "probe": {
+        "above": [
+          6,
+          8
+        ],
+        "at": [
+          6,
+          8
+        ],
+        "below": [
+          0,
+          8
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          7,
+          12
+        ],
+        "US": [
+          5,
+          12
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          8,
+          15
+        ],
+        "True": [
+          4,
+          9
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          6,
+          12
+        ],
+        "immediate": [
+          4,
+          8
+        ],
+        "none": [
+          2,
+          4
+        ]
+      },
+      "distractor": {
+        "False": [
+          9,
+          17
+        ],
+        "True": [
+          3,
+          7
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          4,
+          4
+        ],
+        "crit_eu_unacked": [
+          3,
+          3
+        ],
+        "crit_us_unacked": [
+          1,
+          6
+        ],
+        "low_us": [
+          2,
+          5
+        ],
+        "none": [
+          2,
+          6
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          4,
+          8
+        ],
+        "embedded_json": [
+          5,
+          7
+        ],
+        "instruction_injection": [
+          2,
+          3
+        ],
+        "long_markdown": [
+          1,
+          6
+        ]
+      }
+    },
+    "ack_flipped": {
+      "min_severity": {
+        "critical": [
+          4,
+          7
+        ],
+        "high": [
+          8,
+          11
+        ],
+        "medium": [
+          1,
+          6
+        ]
+      },
+      "ack_required": {
+        "False": [
+          5,
+          13
+        ],
+        "True": [
+          8,
+          11
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          2,
+          3
+        ],
+        "ops-eu-legacy|ops-eu": [
+          6,
+          8
+        ],
+        "ops-eu|ops-eu-legacy": [
+          2,
+          9
+        ],
+        "ops-eu|ops-us": [
+          3,
+          4
+        ]
+      },
+      "fault": {
+        "both": [
+          3,
+          4
+        ],
+        "none": [
+          6,
+          11
+        ],
+        "notification_503": [
+          3,
+          6
+        ],
+        "ticket_after_commit": [
+          1,
+          3
+        ]
+      },
+      "probe": {
+        "above": [
+          5,
+          8
+        ],
+        "at": [
+          6,
+          8
+        ],
+        "below": [
+          2,
+          8
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          6,
+          12
+        ],
+        "US": [
+          7,
+          12
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          10,
+          15
+        ],
+        "True": [
+          3,
+          9
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          7,
+          12
+        ],
+        "immediate": [
+          5,
+          8
+        ],
+        "none": [
+          1,
+          4
+        ]
+      },
+      "distractor": {
+        "False": [
+          11,
+          17
+        ],
+        "True": [
+          2,
+          7
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          2,
+          4
+        ],
+        "crit_eu_unacked": [
+          3,
+          3
+        ],
+        "crit_us_unacked": [
+          6,
+          6
+        ],
+        "low_us": [
+          1,
+          5
+        ],
+        "none": [
+          1,
+          6
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          2,
+          8
+        ],
+        "embedded_json": [
+          5,
+          7
+        ],
+        "instruction_injection": [
+          2,
+          3
+        ],
+        "long_markdown": [
+          4,
+          6
+        ]
+      }
+    },
+    "pii_leak": {
+      "min_severity": {
+        "critical": [
+          4,
+          7
+        ],
+        "high": [
+          9,
+          11
+        ],
+        "medium": [
+          5,
+          6
+        ]
+      },
+      "ack_required": {
+        "False": [
+          8,
+          13
+        ],
+        "True": [
+          10,
+          11
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          3,
+          3
+        ],
+        "ops-eu-legacy|ops-eu": [
+          7,
+          8
+        ],
+        "ops-eu|ops-eu-legacy": [
+          5,
+          9
+        ],
+        "ops-eu|ops-us": [
+          3,
+          4
+        ]
+      },
+      "fault": {
+        "both": [
+          4,
+          4
+        ],
+        "none": [
+          8,
+          11
+        ],
+        "notification_503": [
+          3,
+          6
+        ],
+        "ticket_after_commit": [
+          3,
+          3
+        ]
+      },
+      "probe": {
+        "above": [
+          8,
+          8
+        ],
+        "at": [
+          8,
+          8
+        ],
+        "below": [
+          2,
+          8
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          8,
+          12
+        ],
+        "US": [
+          10,
+          12
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          13,
+          15
+        ],
+        "True": [
+          5,
+          9
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          8,
+          12
+        ],
+        "immediate": [
+          7,
+          8
+        ],
+        "none": [
+          3,
+          4
+        ]
+      },
+      "distractor": {
+        "False": [
+          14,
+          17
+        ],
+        "True": [
+          4,
+          7
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          4,
+          4
+        ],
+        "crit_eu_unacked": [
+          3,
+          3
+        ],
+        "crit_us_unacked": [
+          6,
+          6
+        ],
+        "low_us": [
+          2,
+          5
+        ],
+        "none": [
+          3,
+          6
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          5,
+          8
+        ],
+        "embedded_json": [
+          6,
+          7
+        ],
+        "instruction_injection": [
+          3,
+          3
+        ],
+        "long_markdown": [
+          4,
+          6
+        ]
+      }
+    },
+    "no_dedupe": {
+      "min_severity": {
+        "critical": [
+          3,
+          7
+        ],
+        "high": [
+          7,
+          11
+        ],
+        "medium": [
+          3,
+          6
+        ]
+      },
+      "ack_required": {
+        "False": [
+          6,
+          13
+        ],
+        "True": [
+          7,
+          11
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          1,
+          3
+        ],
+        "ops-eu-legacy|ops-eu": [
+          5,
+          8
+        ],
+        "ops-eu|ops-eu-legacy": [
+          4,
+          9
+        ],
+        "ops-eu|ops-us": [
+          3,
+          4
+        ]
+      },
+      "fault": {
+        "both": [
+          3,
+          4
+        ],
+        "none": [
+          7,
+          11
+        ],
+        "notification_503": [
+          1,
+          6
+        ],
+        "ticket_after_commit": [
+          2,
+          3
+        ]
+      },
+      "probe": {
+        "above": [
+          6,
+          8
+        ],
+        "at": [
+          7,
+          8
+        ],
+        "below": [
+          0,
+          8
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          6,
+          12
+        ],
+        "US": [
+          7,
+          12
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          9,
+          15
+        ],
+        "True": [
+          4,
+          9
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          8,
+          12
+        ],
+        "immediate": [
+          5,
+          8
+        ],
+        "none": [
+          0,
+          4
+        ]
+      },
+      "distractor": {
+        "False": [
+          10,
+          17
+        ],
+        "True": [
+          3,
+          7
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          4,
+          4
+        ],
+        "crit_eu_unacked": [
+          2,
+          3
+        ],
+        "crit_us_unacked": [
+          4,
+          6
+        ],
+        "low_us": [
+          1,
+          5
+        ],
+        "none": [
+          2,
+          6
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          3,
+          8
+        ],
+        "embedded_json": [
+          4,
+          7
+        ],
+        "instruction_injection": [
+          3,
+          3
+        ],
+        "long_markdown": [
+          3,
+          6
+        ]
+      }
+    },
+    "wrong_project": {
+      "min_severity": {
+        "critical": [
+          4,
+          7
+        ],
+        "high": [
+          9,
+          11
+        ],
+        "medium": [
+          5,
+          6
+        ]
+      },
+      "ack_required": {
+        "False": [
+          8,
+          13
+        ],
+        "True": [
+          10,
+          11
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          3,
+          3
+        ],
+        "ops-eu-legacy|ops-eu": [
+          7,
+          8
+        ],
+        "ops-eu|ops-eu-legacy": [
+          5,
+          9
+        ],
+        "ops-eu|ops-us": [
+          3,
+          4
+        ]
+      },
+      "fault": {
+        "both": [
+          4,
+          4
+        ],
+        "none": [
+          8,
+          11
+        ],
+        "notification_503": [
+          3,
+          6
+        ],
+        "ticket_after_commit": [
+          3,
+          3
+        ]
+      },
+      "probe": {
+        "above": [
+          8,
+          8
+        ],
+        "at": [
+          8,
+          8
+        ],
+        "below": [
+          2,
+          8
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          8,
+          12
+        ],
+        "US": [
+          10,
+          12
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          13,
+          15
+        ],
+        "True": [
+          5,
+          9
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          8,
+          12
+        ],
+        "immediate": [
+          7,
+          8
+        ],
+        "none": [
+          3,
+          4
+        ]
+      },
+      "distractor": {
+        "False": [
+          14,
+          17
+        ],
+        "True": [
+          4,
+          7
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          4,
+          4
+        ],
+        "crit_eu_unacked": [
+          3,
+          3
+        ],
+        "crit_us_unacked": [
+          6,
+          6
+        ],
+        "low_us": [
+          2,
+          5
+        ],
+        "none": [
+          3,
+          6
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          5,
+          8
+        ],
+        "embedded_json": [
+          6,
+          7
+        ],
+        "instruction_injection": [
+          3,
+          3
+        ],
+        "long_markdown": [
+          4,
+          6
+        ]
+      }
+    },
+    "no_retry": {
+      "min_severity": {
+        "critical": [
+          2,
+          4
+        ],
+        "high": [
+          3,
+          6
+        ],
+        "medium": [
+          2,
+          3
+        ]
+      },
+      "ack_required": {
+        "False": [
+          3,
+          6
+        ],
+        "True": [
+          4,
+          7
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          1,
+          1
+        ],
+        "ops-eu-legacy|ops-eu": [
+          4,
+          6
+        ],
+        "ops-eu|ops-eu-legacy": [
+          1,
+          4
+        ],
+        "ops-eu|ops-us": [
+          1,
+          2
+        ]
+      },
+      "fault": {
+        "both": [
+          4,
+          4
+        ],
+        "notification_503": [
+          2,
+          6
+        ],
+        "ticket_after_commit": [
+          1,
+          3
+        ]
+      },
+      "probe": {
+        "above": [
+          4,
+          5
+        ],
+        "at": [
+          2,
+          4
+        ],
+        "below": [
+          1,
+          4
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          3,
+          5
+        ],
+        "US": [
+          4,
+          8
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          5,
+          9
+        ],
+        "True": [
+          2,
+          4
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          3,
+          7
+        ],
+        "immediate": [
+          1,
+          2
+        ],
+        "none": [
+          3,
+          4
+        ]
+      },
+      "distractor": {
+        "False": [
+          6,
+          9
+        ],
+        "True": [
+          1,
+          4
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          2,
+          2
+        ],
+        "crit_eu_unacked": [
+          2,
+          2
+        ],
+        "crit_us_unacked": [
+          1,
+          3
+        ],
+        "low_us": [
+          1,
+          3
+        ],
+        "none": [
+          1,
+          3
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          2,
+          2
+        ],
+        "embedded_json": [
+          2,
+          3
+        ],
+        "instruction_injection": [
+          1,
+          3
+        ],
+        "long_markdown": [
+          2,
+          5
+        ]
+      }
+    },
+    "no_tenant_check": {
+      "min_severity": {
+        "critical": [
+          1,
+          1
+        ],
+        "high": [
+          2,
+          2
+        ],
+        "medium": [
+          4,
+          4
+        ]
+      },
+      "ack_required": {
+        "False": [
+          5,
+          5
+        ],
+        "True": [
+          2,
+          2
+        ]
+      },
+      "channel_pair": {
+        "ops-eu-legacy|ops-eu": [
+          2,
+          2
+        ],
+        "ops-eu|ops-eu-legacy": [
+          4,
+          4
+        ],
+        "ops-eu|ops-us": [
+          1,
+          1
+        ]
+      },
+      "fault": {
+        "both": [
+          1,
+          1
+        ],
+        "none": [
+          3,
+          3
+        ],
+        "notification_503": [
+          3,
+          3
+        ]
+      },
+      "probe": {
+        "above": [
+          2,
+          2
+        ],
+        "at": [
+          2,
+          2
+        ],
+        "below": [
+          3,
+          3
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          3,
+          3
+        ],
+        "US": [
+          4,
+          4
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          3,
+          3
+        ],
+        "True": [
+          4,
+          4
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          5,
+          5
+        ],
+        "immediate": [
+          1,
+          1
+        ],
+        "none": [
+          1,
+          1
+        ]
+      },
+      "distractor": {
+        "True": [
+          7,
+          7
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          1,
+          1
+        ],
+        "crit_us_unacked": [
+          1,
+          1
+        ],
+        "low_us": [
+          3,
+          3
+        ],
+        "none": [
+          2,
+          2
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          3,
+          3
+        ],
+        "embedded_json": [
+          2,
+          2
+        ],
+        "instruction_injection": [
+          1,
+          1
+        ],
+        "long_markdown": [
+          1,
+          1
+        ]
+      }
+    },
+    "title_routes": {},
+    "escalate_high": {
+      "min_severity": {
+        "high": [
+          3,
+          3
+        ],
+        "medium": [
+          2,
+          2
+        ]
+      },
+      "ack_required": {
+        "False": [
+          4,
+          4
+        ],
+        "True": [
+          1,
+          1
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          1,
+          1
+        ],
+        "ops-eu-legacy|ops-eu": [
+          1,
+          1
+        ],
+        "ops-eu|ops-eu-legacy": [
+          3,
+          3
+        ]
+      },
+      "fault": {
+        "none": [
+          4,
+          4
+        ],
+        "ticket_after_commit": [
+          1,
+          1
+        ]
+      },
+      "probe": {
+        "above": [
+          2,
+          2
+        ],
+        "at": [
+          3,
+          3
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          2,
+          2
+        ],
+        "US": [
+          3,
+          3
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          3,
+          3
+        ],
+        "True": [
+          2,
+          2
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          3,
+          3
+        ],
+        "immediate": [
+          2,
+          2
+        ]
+      },
+      "distractor": {
+        "False": [
+          4,
+          4
+        ],
+        "True": [
+          1,
+          1
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          2,
+          2
+        ],
+        "crit_us_unacked": [
+          2,
+          2
+        ],
+        "none": [
+          1,
+          1
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          2,
+          2
+        ],
+        "embedded_json": [
+          1,
+          1
+        ],
+        "instruction_injection": [
+          1,
+          1
+        ],
+        "long_markdown": [
+          1,
+          1
+        ]
+      }
+    },
+    "key_collision": {
+      "min_severity": {
+        "critical": [
+          1,
+          1
+        ],
+        "high": [
+          1,
+          1
+        ]
+      },
+      "ack_required": {
+        "False": [
+          1,
+          1
+        ],
+        "True": [
+          1,
+          1
+        ]
+      },
+      "channel_pair": {
+        "ops-eu-legacy|ops-eu": [
+          1,
+          1
+        ],
+        "ops-eu|ops-us": [
+          1,
+          1
+        ]
+      },
+      "fault": {
+        "both": [
+          1,
+          1
+        ],
+        "ticket_after_commit": [
+          1,
+          1
+        ]
+      },
+      "probe": {
+        "above": [
+          2,
+          2
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          1,
+          1
+        ],
+        "US": [
+          1,
+          1
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          2,
+          2
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          1,
+          1
+        ],
+        "immediate": [
+          1,
+          1
+        ]
+      },
+      "distractor": {
+        "False": [
+          2,
+          2
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          1,
+          1
+        ],
+        "crit_us_unacked": [
+          1,
+          1
+        ]
+      },
+      "hostile_style": {
+        "embedded_json": [
+          1,
+          1
+        ],
+        "long_markdown": [
+          1,
+          1
+        ]
+      }
+    },
+    "notify_first": {
+      "min_severity": {
+        "critical": [
+          4,
+          4
+        ],
+        "high": [
+          9,
+          9
+        ],
+        "medium": [
+          5,
+          5
+        ]
+      },
+      "ack_required": {
+        "False": [
+          8,
+          8
+        ],
+        "True": [
+          10,
+          10
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          3,
+          3
+        ],
+        "ops-eu-legacy|ops-eu": [
+          7,
+          7
+        ],
+        "ops-eu|ops-eu-legacy": [
+          5,
+          5
+        ],
+        "ops-eu|ops-us": [
+          3,
+          3
+        ]
+      },
+      "fault": {
+        "both": [
+          4,
+          4
+        ],
+        "none": [
+          8,
+          8
+        ],
+        "notification_503": [
+          3,
+          3
+        ],
+        "ticket_after_commit": [
+          3,
+          3
+        ]
+      },
+      "probe": {
+        "above": [
+          8,
+          8
+        ],
+        "at": [
+          8,
+          8
+        ],
+        "below": [
+          2,
+          2
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          8,
+          8
+        ],
+        "US": [
+          10,
+          10
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          13,
+          13
+        ],
+        "True": [
+          5,
+          5
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          8,
+          8
+        ],
+        "immediate": [
+          7,
+          7
+        ],
+        "none": [
+          3,
+          3
+        ]
+      },
+      "distractor": {
+        "False": [
+          14,
+          14
+        ],
+        "True": [
+          4,
+          4
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          4,
+          4
+        ],
+        "crit_eu_unacked": [
+          3,
+          3
+        ],
+        "crit_us_unacked": [
+          6,
+          6
+        ],
+        "low_us": [
+          2,
+          2
+        ],
+        "none": [
+          3,
+          3
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          5,
+          5
+        ],
+        "embedded_json": [
+          6,
+          6
+        ],
+        "instruction_injection": [
+          3,
+          3
+        ],
+        "long_markdown": [
+          4,
+          4
+        ]
+      }
+    },
+    "eu_threshold_up": {
+      "min_severity": {
+        "critical": [
+          3,
+          3
+        ],
+        "high": [
+          3,
+          3
+        ],
+        "medium": [
+          1,
+          1
+        ]
+      },
+      "ack_required": {
+        "False": [
+          4,
+          4
+        ],
+        "True": [
+          3,
+          3
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          1,
+          1
+        ],
+        "ops-eu-legacy|ops-eu": [
+          3,
+          3
+        ],
+        "ops-eu|ops-eu-legacy": [
+          2,
+          2
+        ],
+        "ops-eu|ops-us": [
+          1,
+          1
+        ]
+      },
+      "fault": {
+        "both": [
+          2,
+          2
+        ],
+        "none": [
+          3,
+          3
+        ],
+        "notification_503": [
+          1,
+          1
+        ],
+        "ticket_after_commit": [
+          1,
+          1
+        ]
+      },
+      "probe": {
+        "above": [
+          1,
+          1
+        ],
+        "at": [
+          6,
+          6
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          5,
+          5
+        ],
+        "US": [
+          2,
+          2
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          6,
+          6
+        ],
+        "True": [
+          1,
+          1
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          3,
+          3
+        ],
+        "immediate": [
+          2,
+          2
+        ],
+        "none": [
+          2,
+          2
+        ]
+      },
+      "distractor": {
+        "False": [
+          6,
+          6
+        ],
+        "True": [
+          1,
+          1
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          1,
+          1
+        ],
+        "crit_eu_unacked": [
+          2,
+          2
+        ],
+        "crit_us_unacked": [
+          1,
+          1
+        ],
+        "low_us": [
+          1,
+          1
+        ],
+        "none": [
+          2,
+          2
+        ]
+      },
+      "hostile_style": {
+        "benign": [
+          1,
+          1
+        ],
+        "embedded_json": [
+          4,
+          4
+        ],
+        "instruction_injection": [
+          1,
+          1
+        ],
+        "long_markdown": [
+          1,
+          1
+        ]
+      }
+    },
+    "us_ack_ignored": {
+      "min_severity": {
+        "critical": [
+          2,
+          2
+        ],
+        "high": [
+          2,
+          2
+        ],
+        "medium": [
+          1,
+          1
+        ]
+      },
+      "ack_required": {
+        "True": [
+          5,
+          5
+        ]
+      },
+      "channel_pair": {
+        "eu-current-1|eu-current-10": [
+          1,
+          1
+        ],
+        "ops-eu-legacy|ops-eu": [
+          3,
+          3
+        ],
+        "ops-eu|ops-eu-legacy": [
+          1,
+          1
+        ]
+      },
+      "fault": {
+        "both": [
+          1,
+          1
+        ],
+        "none": [
+          1,
+          1
+        ],
+        "notification_503": [
+          2,
+          2
+        ],
+        "ticket_after_commit": [
+          1,
+          1
+        ]
+      },
+      "probe": {
+        "above": [
+          1,
+          1
+        ],
+        "at": [
+          2,
+          2
+        ],
+        "below": [
+          2,
+          2
+        ]
+      },
+      "probe_region": {
+        "EU": [
+          1,
+          1
+        ],
+        "US": [
+          4,
+          4
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          4,
+          4
+        ],
+        "True": [
+          1,
+          1
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          2,
+          2
+        ],
+        "immediate": [
+          3,
+          3
+        ]
+      },
+      "distractor": {
+        "False": [
+          4,
+          4
+        ],
+        "True": [
+          1,
+          1
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          1,
+          1
+        ],
+        "crit_us_unacked": [
+          4,
+          4
+        ]
+      },
+      "hostile_style": {
+        "embedded_json": [
+          1,
+          1
+        ],
+        "instruction_injection": [
+          1,
+          1
+        ],
+        "long_markdown": [
+          3,
+          3
+        ]
+      }
+    },
+    "title_limit_200": {
+      "min_severity": {
+        "critical": [
+          2,
+          2
+        ],
+        "high": [
+          1,
+          1
+        ]
+      },
+      "ack_required": {
+        "False": [
+          1,
+          1
+        ],
+        "True": [
+          2,
+          2
+        ]
+      },
+      "channel_pair": {
+        "ops-eu-legacy|ops-eu": [
+          3,
+          3
+        ]
+      },
+      "fault": {
+        "both": [
+          1,
+          1
+        ],
+        "none": [
+          1,
+          1
+        ],
+        "ticket_after_commit": [
+          1,
+          1
+        ]
+      },
+      "probe": {
+        "above": [
+          1,
+          1
+        ],
+        "at": [
+          2,
+          2
+        ]
+      },
+      "probe_region": {
+        "US": [
+          3,
+          3
+        ]
+      },
+      "probe_ack": {
+        "False": [
+          3,
+          3
+        ]
+      },
+      "dup_mode": {
+        "after_other": [
+          2,
+          2
+        ],
+        "immediate": [
+          1,
+          1
+        ]
+      },
+      "distractor": {
+        "False": [
+          3,
+          3
+        ]
+      },
+      "companion": {
+        "crit_eu_acked": [
+          1,
+          1
+        ],
+        "crit_us_unacked": [
+          2,
+          2
+        ]
+      },
+      "hostile_style": {
+        "long_markdown": [
+          3,
+          3
+        ]
+      }
+    }
+  },
+  "divergences": {
+    "compared": null,
+    "count": 0,
+    "items": []
+  }
+}

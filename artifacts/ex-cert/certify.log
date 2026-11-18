@@ -1,0 +1,239 @@
+reference: 1/12 scn-0000
+reference: 2/12 scn-0001
+reference: 3/12 scn-0002
+reference: 4/12 scn-0003
+reference: 5/12 scn-0004
+reference: 6/12 scn-0005
+reference: 7/12 scn-0006
+reference: 8/12 scn-0007
+reference: 9/12 scn-0008
+reference: 10/12 scn-0009
+reference: 11/12 scn-0010
+reference: 12/12 scn-0011
+{
+  "runtimes": [
+    "reference"
+  ],
+  "primary_runtime": "reference",
+  "scenarios": 12,
+  "suites": {
+    "reference/legacy": {
+      "control_pass": 12,
+      "control_total": 12,
+      "applicable_mutants": 98,
+      "killed": 93,
+      "kill_rate": 0.949,
+      "errors": 0,
+      "per_mutant": {
+        "threshold_up": {
+          "applicable": 7,
+          "killed": 7,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "threshold_down": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "eu_channel_is_default": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "ack_flipped": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "pii_leak": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "no_dedupe": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "no_retry": {
+          "applicable": 7,
+          "killed": 2,
+          "errors": 0,
+          "kill_rate": 0.286
+        },
+        "no_tenant_check": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "title_routes": {
+          "applicable": 12,
+          "killed": 12,
+          "errors": 0,
+          "kill_rate": 1.0
+        }
+      }
+    },
+    "reference/generated": {
+      "control_pass": 12,
+      "control_total": 12,
+      "applicable_mutants": 84,
+      "killed": 45,
+      "kill_rate": 0.536,
+      "errors": 0,
+      "per_mutant": {
+        "threshold_up": {
+          "applicable": 7,
+          "killed": 3,
+          "errors": 0,
+          "kill_rate": 0.429
+        },
+        "threshold_down": {
+          "applicable": 12,
+          "killed": 4,
+          "errors": 0,
+          "kill_rate": 0.333
+        },
+        "eu_channel_is_default": {
+          "applicable": 12,
+          "killed": 5,
+          "errors": 0,
+          "kill_rate": 0.417
+        },
+        "ack_flipped": {
+          "applicable": 12,
+          "killed": 7,
+          "errors": 0,
+          "kill_rate": 0.583
+        },
+        "pii_leak": {
+          "applicable": 12,
+          "killed": 10,
+          "errors": 0,
+          "kill_rate": 0.833
+        },
+        "no_dedupe": {
+          "applicable": 12,
+          "killed": 7,
+          "errors": 0,
+          "kill_rate": 0.583
+        },
+        "no_retry": {
+          "applicable": 7,
+          "killed": 2,
+          "errors": 0,
+          "kill_rate": 0.286
+        },
+        "no_tenant_check": {
+          "applicable": 5,
+          "killed": 5,
+          "errors": 0,
+          "kill_rate": 1.0
+        },
+        "title_routes": {
+          "applicable": 5,
+          "killed": 2,
+          "errors": 0,
+          "kill_rate": 0.4
+        }
+      }
+    }
+  },
+  "minimal_cover": {
+    "mutant_types": [
+      "ack_flipped",
+      "eu_channel_is_default",
+      "no_dedupe",
+      "no_retry",
+      "no_tenant_check",
+      "pii_leak",
+      "threshold_down",
+      "threshold_up",
+      "title_routes"
+    ],
+    "scenarios": [
+      "scn-0000",
+      "scn-0007",
+      "scn-0003"
+    ],
+    "size": 3
+  },
+  "title_trigger_by_style": {
+    "benign/template": {
+      "scenarios": 5,
+      "title_triggers": 0
+    },
+    "embedded_json/template": {
+      "scenarios": 2,
+      "title_triggers": 2
+    },
+    "instruction_injection/template": {
+      "scenarios": 3,
+      "title_triggers": 3
+    },
+    "long_markdown/template": {
+      "scenarios": 2,
+      "title_triggers": 0
+    }
+  },
+  "blind_spots": [],
+  "legacy_blind_spots": []
+}
+{
+  "accepted": {
+    "count": 1,
+    "of": 12,
+    "with_any_kill": 12,
+    "train": 1,
+    "holdout": 0,
+    "novel_kill_pairs": 1
+  },
+  "minimal_cover": {
+    "mutant_types": [
+      "ack_flipped",
+      "eu_channel_is_default",
+      "no_dedupe",
+      "no_retry",
+      "no_tenant_check",
+      "pii_leak",
+      "threshold_down",
+      "threshold_up",
+      "title_routes"
+    ],
+    "scenarios": [
+      "scn-0000",
+      "scn-0007",
+      "scn-0003"
+    ],
+    "size": 3
+  },
+  "title_trigger_by_style": {
+    "benign/template": {
+      "scenarios": 5,
+      "title_triggers": 0
+    },
+    "embedded_json/template": {
+      "scenarios": 2,
+      "title_triggers": 2
+    },
+    "instruction_injection/template": {
+      "scenarios": 3,
+      "title_triggers": 3
+    },
+    "long_markdown/template": {
+      "scenarios": 2,
+      "title_triggers": 0
+    }
+  },
+  "divergences": {
+    "compared": null,
+    "count": 0
+  }
+}

@@ -1,0 +1,33 @@
+{
+  "session": 2,
+  "grants": [],
+  "notifications": [],
+  "denied_attempts": [],
+  "idempotency": {},
+  "memory": {
+    "schema_version": 1,
+    "scope": {
+      "tenant": "tenant-12",
+      "user": "synthetic-development-stress-42-000063",
+      "namespace": "cf94e242-d5f4-4f8f-a9ff-a03eda10988e/development-stress-42-000063/baseline"
+    },
+    "data": {
+      "notification_channel": "email"
+    }
+  },
+  "policy_reads": 1,
+  "access_reads": 0,
+  "workspace_resolved": true,
+  "claims": [
+    {
+      "session": 1,
+      "status": "remembered",
+      "message": "Preference saved."
+    },
+    {
+      "session": 2,
+      "status": "denied",
+      "message": "Policy does not permit the request."
+    }
+  ]
+}

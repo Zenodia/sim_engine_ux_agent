@@ -1,0 +1,9 @@
+{
+  "project": "SRE",
+  "minimum_severity": "high",
+  "default_channel": "ops-3",
+  "eu_channel": "eu-current-3",
+  "deduplicate": true,
+  "minimize_personal_data": true,
+  "acknowledgement_before_escalation": true
+}

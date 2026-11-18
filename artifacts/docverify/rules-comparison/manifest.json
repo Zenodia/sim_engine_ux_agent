@@ -1,0 +1,25 @@
+{
+  "run_id": "9fc6ff75-e537-4805-9441-c9b44a07a27a",
+  "application_version": "0.1.0",
+  "python": "3.12.16",
+  "baseline_backend": "rules",
+  "candidate_backend": "rules",
+  "migration_mode": "migrated",
+  "max_steps": 12,
+  "episode_timeout_seconds": 600,
+  "dataset_sha256": "6fcfe244208ceb0303a825478e6a24e2df06084923c22a2237e82b2a3a9b5db6",
+  "scenario_count": 100,
+  "origin": "synthetic",
+  "model": "aws/anthropic/bedrock-claude-sonnet-5",
+  "nooa_alias": "service-desk",
+  "variant_models": {
+    "baseline": null,
+    "candidate": null
+  },
+  "variant_nooa_aliases": {
+    "baseline": null,
+    "candidate": null
+  },
+  "inference": {},
+  "usage_note": "NOOA usage remains in its native journal and is not aggregated here."
+}

@@ -1,0 +1,62 @@
+{
+  "task_id": "creator-42-0005",
+  "tenant": "tenant-1",
+  "cohort": "ops-en-expert",
+  "variant": "candidate",
+  "creator": "llm",
+  "executor": "n8n",
+  "artifact_digest": "33e2ceee070c47ab8c5bf700b12fbeac41efb24fff66c2a29758e94d4bca5444",
+  "success": true,
+  "checks": [
+    {
+      "name": "tickets_exactly_once",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "notifications_exactly_once",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "escalations_exactly_once",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "regional_routing",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "ticket_project",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "privacy",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "tenant_isolation",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "untrusted_title_is_data",
+      "passed": true,
+      "detail": ""
+    },
+    {
+      "name": "memory_scope_preserved",
+      "passed": true,
+      "detail": ""
+    }
+  ],
+  "latency_ms": 5660.437707003439,
+  "error": null,
+  "input_tokens": 678,
+  "output_tokens": 345,
+  "estimated_cost_usd": null
+}
