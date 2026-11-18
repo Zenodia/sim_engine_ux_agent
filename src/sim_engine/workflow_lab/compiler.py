@@ -38,25 +38,43 @@ return [{json: {allowed: true, status: 'planned', namespace: cfg.namespace,
 
 
 # Deliberate engine-level defects used only by verifier certification (mutation testing).
-ENGINE_MUTATIONS = ("no_retry", "no_tenant_check", "title_routes")
-# "title_routes" models a workflow that obeys instructions found inside alert text (prompt-injection compliance).
-TITLE_TRIGGER_PATTERN = r'ignore|https?://|"channel"'
-TITLE_SINK_CHANNEL = "external-sink"
+ENGINE_MUTATIONS = ("no_retry", "no_tenant_check", "title_routes", "escalate_high", "key_collision", "notify_first",
+                    "eu_threshold_up", "us_ack_ignored", "title_limit_200")
+# "title_routes" models a naive workflow that obeys a routing directive found inside alert text: a JSON "channel"
+# key or a `channel: name` phrase in the title overrides the destination (prompt-injection style compliance).
+TITLE_DIRECTIVE_PATTERN = r'(?:"channel"\s*:\s*"|\bchannel\s*[:=]\s*#?)([A-Za-z0-9_-]+)'
+_ROUTE_JS = "channel: event.region === 'EU' ? cfg.spec.eu_channel : cfg.spec.default_channel,"
+_ESCALATE_JS = "escalate: event.severity === 'critical' &&"
+_KEY_JS = "effect_key: event.event_id + suffix,"
+_THRESHOLD_JS = "severity[event.severity] < severity[cfg.spec.minimum_severity])"
+_ACK_JS = "(!cfg.spec.acknowledgement_before_escalation || event.acknowledged)}}];"
+_TITLE_JS = "event.title.length <= 1000"
+
+
+def _patch(code: str, old: str, new: str) -> str:
+    patched = code.replace(old, new, 1)
+    assert patched != code, "mutation anchor not found in the plan code; update the mutation"
+    return patched
 
 
 def plan_code(spec: Spec, namespace: str, tenant: str, legacy: bool = False, mutation: str | None = None) -> str:
     code = PLAN_JS.replace("__CONFIG__", json.dumps({"spec": spec.model_dump(), "namespace": namespace,
                                                     "tenant": tenant, "legacy": legacy}))
     if mutation == "no_tenant_check":
-        mutated = code.replace("event.tenant === cfg.tenant && ", "", 1)
-        assert mutated != code, "tenant check not found; update the mutation"
-        code = mutated
-    if mutation == "title_routes":
-        original = "channel: event.region === 'EU' ? cfg.spec.eu_channel : cfg.spec.default_channel,"
-        mutated = code.replace(original, "channel: new RegExp(" + json.dumps(TITLE_TRIGGER_PATTERN) +
-                               ", 'i').test(event.title) ? " + json.dumps(TITLE_SINK_CHANNEL) + " : (" + original[len("channel: "):-1] + "),", 1)
-        assert mutated != code, "channel routing not found; update the mutation"
-        code = mutated
+        code = _patch(code, "event.tenant === cfg.tenant && ", "")
+    elif mutation == "title_routes":
+        code = _patch(code, _ROUTE_JS, "channel: ((m) => m ? m[1] : (" + _ROUTE_JS[len("channel: "):-1] +
+                      "))(new RegExp(" + json.dumps(TITLE_DIRECTIVE_PATTERN) + ", 'i').exec(event.title)),")
+    elif mutation == "escalate_high":
+        code = _patch(code, _ESCALATE_JS, "escalate: (event.severity === 'critical' || event.severity === 'high') &&")
+    elif mutation == "key_collision":
+        code = _patch(code, _KEY_JS, "effect_key: event.severity + ':' + event.region + suffix,")
+    elif mutation == "eu_threshold_up":
+        code = _patch(code, _THRESHOLD_JS, "severity[event.severity] < severity[cfg.spec.minimum_severity] + (event.region === 'EU' ? 1 : 0))")
+    elif mutation == "us_ack_ignored":
+        code = _patch(code, _ACK_JS, "(!cfg.spec.acknowledgement_before_escalation || event.acknowledged || event.region === 'US')}}];")
+    elif mutation == "title_limit_200":
+        code = _patch(code, _TITLE_JS, "event.title.length <= 200")
     return code
 
 
@@ -108,9 +126,9 @@ def compile_workflow(spec: Spec, namespace: str, tenant: str, fixture_url: str,
     connections = {
         "Incident webhook": {"main": [[link("Validate and plan")]]},
         "Validate and plan": {"main": [[link("Eligible incident")]]},
-        "Eligible incident": {"main": [[link("Create ticket")], [link("Execution receipt")]]},
-        "Create ticket": {"main": [[link("Notify team")]]},
-        "Notify team": {"main": [[link("Escalation required")]]},
+        "Eligible incident": {"main": [[link("Notify team" if mutation == "notify_first" else "Create ticket")], [link("Execution receipt")]]},
+        "Create ticket": {"main": [[link("Escalation required" if mutation == "notify_first" else "Notify team")]]},
+        "Notify team": {"main": [[link("Create ticket" if mutation == "notify_first" else "Escalation required")]]},
         "Escalation required": {"main": [[link("Escalate incident")], [link("Execution receipt")]]},
         "Escalate incident": {"main": [[link("Execution receipt")]]},
     }

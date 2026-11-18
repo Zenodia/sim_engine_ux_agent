@@ -25,7 +25,7 @@ The point is to demonstrate the evaluation machinery, not to measure a real mode
 
 ```bash
 # from the repository root, after the install in docs/02-setup-and-reproduce.md
-examples/service-desk/run.sh                    # or: examples/service-desk/run.sh artifacts/my-run   (folder is created)
+bash examples/service-desk/run.sh                    # or: bash examples/service-desk/run.sh artifacts/my-run   (folder is created)
 ```
 
 It runs `sim-engine generate`, `compare`, `gate` and `report`. Use a new output folder each time; runs never append to old evidence.

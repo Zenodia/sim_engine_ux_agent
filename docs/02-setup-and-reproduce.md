@@ -27,7 +27,7 @@ git clone <this-repository> && cd sim_engine_ux_agent
 uv venv --python 3.12 .venv                       # or: python3.12 -m venv .venv
 uv pip install -p .venv/bin/python -e ".[dev,sdg]" # or: source .venv/bin/activate && pip install -e ".[dev,sdg]"
 export PATH="$PWD/.venv/bin:$PATH"                 # puts sim-engine and n8n-lab on PATH
-pytest -q                                          # expect: 29 passed, 2 skipped
+pytest -q                                          # expect: 36 passed, 2 skipped
 ```
 
 `[sdg]` installs `data-designer`; `[nooa]` (optional) installs NOOA. If you use an existing virtualenv, make sure it has
@@ -57,7 +57,7 @@ somewhere visible, treat it as exposed and rotate it. **Warning:** if `SIM_LLM_A
 
 ## A. Service desk, rules only, no keys (verified 2026-11-18)
 
-Shortcut: `examples/service-desk/run.sh` runs the four commands below and prints the summary ([example README](../examples/service-desk/README.md)).
+Shortcut: `bash examples/service-desk/run.sh` runs the four commands below and prints the summary ([example README](../examples/service-desk/README.md)).
 
 ```bash
 sim-engine generate --count 100 --suite stress --out artifacts/stress.jsonl
@@ -72,7 +72,7 @@ for each run; reusing one raises `FileExistsError` by design.
 
 ## B. n8n reference lifecycle, no keys (verified 2026-11-18, about 51 s)
 
-Shortcut: `examples/n8n-workflow-creator/run_reference.sh` ([example README](../examples/n8n-workflow-creator/README.md)).
+Shortcut: `bash examples/n8n-workflow-creator/run_reference.sh` ([example README](../examples/n8n-workflow-creator/README.md)).
 
 ```bash
 n8n-lab demo --count 100 --out artifacts/n8n-demo
@@ -152,29 +152,36 @@ docker compose -f deploy/n8n/compose.yaml down -v        # also deletes n8n and 
 
 Each real run leaves **unpublished** `sim-engine:*` drafts in the lab n8n; delete them in the editor if you want a clean list.
 
-## D. Verifier certification by mutation testing (verified 2026-11-18)
+## D. Verifier certification and failure-driven generation (verified 2026-11-18)
 
-Shortcut: `examples/n8n-workflow-creator/run_certification.sh` (env `COUNT`, `LLM=1`, `EXECUTOR=both`).
+Shortcut: `bash examples/n8n-workflow-creator/run_certification.sh` (env `COUNT`, `SEED`, `LLM=1`, `EXECUTOR=both`, `HARDEN=1`).
 
 ```bash
-# 1. Generate scenarios with NeMo Data Designer
-n8n-lab scenarios-dd --count 24 --out artifacts/mutation-cert/scenarios-24.jsonl         # LLM titles (needs NVIDIA_API_KEY etc.)
-n8n-lab scenarios-dd --count 24 --no-llm --out artifacts/mutation-cert/scenarios-24.jsonl # template titles, no key, no inference
+# 1. Generate scenarios with NeMo Data Designer (dimensions are seeded: the same --seed gives the same dimensions)
+n8n-lab scenarios-dd --count 24 --seed 42 --out artifacts/loop/scenarios.jsonl            # LLM titles (needs NVIDIA_API_KEY etc.)
+n8n-lab scenarios-dd --count 24 --seed 42 --no-llm --out artifacts/loop/scenarios.jsonl   # template titles, no key, no inference
 
-# 2. Mutation-test the verifier
-n8n-lab certify --scenarios artifacts/mutation-cert/scenarios-24.jsonl --executor reference --out artifacts/mutation-cert/run-ref
-n8n-lab certify --scenarios artifacts/mutation-cert/scenarios-24.jsonl --executor both --allow-activation --out artifacts/mutation-cert/run-24
+# 2. Mutation-test the verifier (16 mutants, generated suite plus fixed suites v1, v2, v3)
+n8n-lab certify --scenarios artifacts/loop/scenarios.jsonl --executor reference --out artifacts/loop/cert-ref
+n8n-lab certify --scenarios artifacts/loop/scenarios.jsonl --executor both --allow-activation --out artifacts/loop/cert-both
+
+# 3. Failure-driven generation: targeted variants for every mutant that survived or was never exercised
+n8n-lab harden --run artifacts/loop/cert-both --scenarios artifacts/loop/scenarios.jsonl \
+  --executor both --allow-activation --per-mutant 2 --out artifacts/loop/harden        # add --no-llm for template titles
 ```
 
-Choose a new `--out` folder each time. With LLM titles, generation takes a few minutes because the endpoint rate-limits;
-Data Designer retries 429 responses on its own. The `--executor both` run imports and publishes a few hundred
-temporary workflows and took only a few minutes on the VM (about 1 s per cell on n8n in the 8-scenario smoke run).
+Choose a new `--out` folder each time. With LLM titles, generation takes a few minutes because the endpoint rate-limits; Data Designer retries
+429 responses on its own. The 24-scenario `--executor both` certification is about 1,200 cells per runtime and took about 23 minutes of n8n
+execution (about 1.1 s per cell); `harden` with 32 variants took a few minutes. Both temporarily publish many workflows and unpublish each afterwards.
 
-Expect (24 scenarios, 9 mutants): all 24 controls pass on both runtimes; legacy suite kills 189/198, generated suite 90/165; legacy
-`no_retry` 4/13 versus generated 7/13; 3 of 24 scenarios accepted; **0 divergences between the reference and n8n over 411 cells**.
-Scenario sampling is not seeded, so the *exact* scenarios (and therefore some counts) differ between generations; the saved
-`scenarios-*.jsonl` is the reproducible record, and re-running `certify` on the same file reproduces the matrix.
-Outputs in the run folder: `summary.json`, `cells.json` (every cell), `report.html`, `n8n-created-workflows.json`.
+Expect (24 scenarios, seed 42, LLM titles): all controls pass on both runtimes; fixed suites kill 267/272 (v1), 296/296 (v2) and 345/345 (v3) of their
+applicable mutants, the generated suite 138/215; **0 divergences between the reference and n8n over 1,224 cells**; `legacy_v1` kills the no-retry defect
+only 4/9 times; 0 of 24 scenarios accepted (v3 already kills everything); the minimal covering subset is 4 scenarios. `harden`: 32 variants, 32 controls pass,
+32 kill their target mutant, 0 divergences, lineage preserved, no suspected oracle gaps. Because the LLM titles are not seeded, the *exact* counts for
+`generated` can differ between generations; the saved `scenarios-*.jsonl` is the reproducible record, and re-running `certify` on the same file reproduces the matrix.
+
+Outputs: `certify` writes `summary.json`, `cells.json` (every cell), `report.html` and `n8n-created-workflows.json`. `harden` writes `variants.jsonl`,
+`summary.json` (targeted versus random kill rate, causes, suspected oracle gaps, lineage check, proposed events), `cells.json` and `report.html`.
 
 ## E. Optional paths carried over from earlier documentation (not re-run in this pass)
 
@@ -213,6 +220,8 @@ then `sim-engine compare ... --candidate-backend nooa`. Pin the NOOA release you
 | `FileExistsError` for an output folder | Choose a new `--out`; runs never append to old evidence |
 | Gate exit code 2 | Hold, not a failure. Read `gate.json`; small or sparse cohorts can legitimately hold |
 | Tests report 2 skipped | Expected: Node.js absent and the opt-in n8n test |
+| `Permission denied` running `examples/.../*.sh` | Executable bits can be lost when the repo is tarred or committed from another machine. Run `bash examples/.../script.sh` |
+| `certify`/`harden` report a suspected oracle gap | A targeted input exposed a mutant that the oracle still did not kill: inspect that variant's `cells.json` entry; the ordering check for `notify_first` was found this way |
 | Cost shows `null` | Pricing not configured; set `SIM_INPUT_USD_PER_MILLION` and `SIM_OUTPUT_USD_PER_MILLION` |
 | Canary at 20% gave 10% (or 25%) of flows | Exposure is a tenant hash threshold, not an exact quota; do not re-roll salts |
 
@@ -227,5 +236,5 @@ then `sim-engine compare ... --candidate-backend nooa`. Pin the NOOA release you
 | `examples/n8n-workflow-creator/` | Advanced example: README, `run_reference.sh` (step B), `run_certification.sh` (step D), draft request, requirements, importable workflow |
 | `scripts/` | `inference_example.py`, `generate_sdg.py`, `enrich_with_data_designer.py` |
 | `configs/population.json` | Illustrative (not calibrated) population weights |
-| `tests/` | Invariant, SDG, inference and workflow-lab tests (29 passed, 2 skipped) |
+| `tests/` | Invariant, SDG, inference and workflow-lab tests (36 passed, 2 skipped) |
 | `artifacts/` | Git-ignored run evidence; each run needs a new folder |

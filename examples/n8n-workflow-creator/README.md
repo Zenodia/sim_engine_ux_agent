@@ -26,33 +26,36 @@ How it is built:
 ### Level 1: reference lifecycle (no keys, no Docker, about 1 minute)
 
 ```bash
-examples/n8n-workflow-creator/run_reference.sh
+bash examples/n8n-workflow-creator/run_reference.sh
 ```
 
 Verified 2026-11-18: offline 100/100, shadow 100/100, canary 10/10 (baseline fails 90/90), expansion 50/50, full 100/100, then
 `rollback drill phase: rollback`. The baseline creator is deliberately defective, so it fails every flow it is given. This is the Python
 reference only.
 
-### Level 2: verifier certification by mutation testing (no keys, no Docker)
+### Level 2: verifier certification and failure-driven generation (no keys, no Docker)
 
 ```bash
-examples/n8n-workflow-creator/run_certification.sh              # 12 template-titled scenarios, reference executor
-COUNT=24 LLM=1 examples/n8n-workflow-creator/run_certification.sh   # Data Designer + Nemotron write the titles (needs NVIDIA_API_KEY)
+bash examples/n8n-workflow-creator/run_certification.sh                          # 12 template-titled scenarios, reference executor
+HARDEN=1 bash examples/n8n-workflow-creator/run_certification.sh                 # ...then targeted variants for every mutant that survived
+COUNT=24 LLM=1 HARDEN=1 bash examples/n8n-workflow-creator/run_certification.sh  # Data Designer + Nemotron write the titles (needs NVIDIA_API_KEY)
 ```
 
-It generates scenarios with NeMo Data Designer, runs the known-good workflow and **nine deliberate defects** (threshold off by one both
-ways, wrong EU channel, inverted acknowledgement, PII leak, no dedupe, no retry, no tenant check, obeys instructions in the alert title) against
-each scenario *and* against the legacy fixed 10-event suite, and reports which suite kills which defect.
+NeMo Data Designer generates scenarios (seeded dimensions, LLM-written titles, a control-validator column). The script runs the known-good workflow and **sixteen
+deliberate defects** (threshold off by one both ways, wrong EU channel, inverted acknowledgement, PII leak, no dedupe, wrong project, no retry, no tenant check,
+a workflow that obeys a routing directive in the alert title, escalating high, idempotency-key collision, notification before ticket, an EU-only threshold bug,
+a US-only acknowledgement skip, a 200-character title limit) against each scenario *and* three fixed suites, and reports blind spots, mutants a suite never exercises,
+and which input exposes which defect. With `HARDEN=1`, each surviving or unexercised mutant becomes a targeted, certified variant.
 
-Verified outputs (details in [the overview](../../docs/01-overview.md#verified-results)):
+Verified 2026-11-18 (24 LLM-title scenarios, reference **and real n8n**, 1,224 cells each; details in [the overview](../../docs/01-overview.md#verified-results)):
 
-| Run | Result |
+| Result | Value |
 |---|---|
-| 24 LLM-title scenarios, reference **and real n8n**, 411 cells each | Real n8n and the reference agree on every cell (0 divergences). Legacy suite kills 189/198 but only **4/13** of the no-retry defect; generated 90/165 and 7/13; 3 of 24 scenarios accepted under the novel-kill rule |
-| 12 template-title scenarios, reference only (the script default, 2026-11-18) | Controls 12/12; legacy 93/98 and generated 45/84; 1 of 12 accepted. Scenario sampling is not seeded, so counts vary run to run |
-
-The finding behind the no-retry number: the legacy suite delivers its first event twice back to back, and the duplicate silently repairs the
-transient failure that a missing retry should expose.
+| Real n8n versus reference | Identical on every cell: 0 divergences, 0 errors |
+| Fixed suites killed (of applicable mutants) | v1 267/272, v2 296/296, v3 345/345 (generated scenarios: 138/215, each is narrow by design) |
+| What the loop found | v1 kills the no-retry defect only 4/9 (a duplicate delivery heals the 503); the **oracle** could not see a notification sent before the ticket until an `effect_order` check was added; v1 and v2 never exercised three combination or boundary defects, which v3 now covers |
+| `harden` on real n8n | 32 targeted variants (2 per mutant): 32/32 passed their control and killed their mutant on both runtimes; random sampling had killed 33 to 75% of the exposure-limited ones; no suspected oracle gaps |
+| Template-title default run (12 scenarios, reference only) | Controls 12/12; fixed v3 kills 166/166; counts vary with the seed |
 
 ### Level 3: real self-hosted n8n (Docker, one-time manual setup)
 
@@ -62,7 +65,7 @@ docker compose -f deploy/n8n/compose.yaml up -d --build      # n8n 2.47.7 on 127
 # create/read/update/delete and publish scopes; put it in .env as N8N_LAB_API_KEY
 n8n-lab generate --count 4 --out artifacts/n8n-integration-tasks.jsonl
 n8n-lab evaluate --tasks artifacts/n8n-integration-tasks.jsonl --executor n8n --allow-activation --out artifacts/n8n-runtime-check
-EXECUTOR=both examples/n8n-workflow-creator/run_certification.sh      # certification on reference and n8n
+EXECUTOR=both HARDEN=1 bash examples/n8n-workflow-creator/run_certification.sh      # certification and hardening on reference and n8n
 ```
 
 Verified 2026-11-18: rules creator candidate 4/4 and baseline 0/4, identical to the reference on all 8 workflows; live Sonnet creator
