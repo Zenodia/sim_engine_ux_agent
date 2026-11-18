@@ -1,8 +1,9 @@
 # Workflow-creator validation: 2026-11-16
 
 Validated locally in the existing conda-backed Python 3.12.7 `.venv`. The original
-service-desk tests remain in the suite. The native n8n engine has not been run on
-this machine: Docker is absent, so that integration check is explicitly skipped.
+service-desk tests remain in the suite. The native n8n engine was subsequently run on
+2026-11-18 (self-hosted n8n 2.47.7 in Docker); see
+[Real n8n engine check](#real-n8n-engine-check-2026-11-18).
 
 ## Executed results
 
@@ -48,12 +49,49 @@ results, not evidence that a particular production system or model is inferior.
 - [x] Incoming shadow messages copied into separate candidate conversation/memory stores.
 - [x] Automatic rollback on failed candidate observations and candidate-session draining,
   verified in tests; the successful lifecycle run used a manual recovery drill.
+- [x] Actual self-hosted n8n import -> publication -> webhook execution -> unpublication
+  (4 users, rules creator; see the real-engine section below).
 - [x] Both supplied inference models exercised with small live workflow-domain samples.
+
+## Real n8n engine check (2026-11-18)
+
+Dedicated Compose stack, n8n 2.47.7, rules creator, 4 users x (baseline, candidate),
+10 deliveries each, `--executor n8n --allow-activation`.
+
+| Check | Observed result |
+|---|---|
+| Candidate on real n8n | **4/4** passed, zero execution errors |
+| Defective baseline on real n8n | **0/4** passed (expected defects detected) |
+| Real n8n vs Python reference | Identical pass/fail and identical failed-check sets for all 8 workflows |
+| Opt-in pytest integration test | 1 passed |
+| Cleanup | All created workflows unpublished; 0 active workflows left |
+| Candidate mean latency | about 1.3 s per flow (10 events) |
+
+Findings from the first real run, both fixed:
+
+- **Compose network.** `internal: true` made the published host ports unreachable; it is
+  now `internal: false` (ports remain bound to 127.0.0.1).
+- **Webhook registration lag.** The publish API returns before the webhook is
+  registered, so the first 4-6 deliveries got `404 ... not registered` and every
+  episode failed. The adapter now retries only that specific 404 (the workflow never
+  ran, so no effect can be duplicated) for up to 15 s; workflow 5xx responses are never
+  retried. A unit test covers this. Without it the real-engine result is wrong, so the
+  earlier 0/4 run is an adapter defect, not a compiler defect.
+
+Live creator on real n8n (2026-11-18, `--creator llm --executor n8n --allow-activation`,
+6 users, 10 deliveries each): candidate **6/6** passed, baseline **0/6**, zero execution
+errors, 0 active workflows left afterwards. Mean candidate latency about 8 s per flow
+(dominated by model authoring); about 0.7-1.5k input / 0.35-0.7k output tokens per
+user; cost unknown because pricing is not configured, so this cannot promote under a
+cost gate. The release identity differs from the rules release.
+
+Limits: 4 rules users and 6 live-creator users only; rules-created workflows only; the live Sonnet creator has not yet
+been combined with the n8n executor; the Node.js compile test is skipped on this host
+(no Node.js), though the compiled Code nodes did execute inside n8n. Evidence remains
+`scope=fixture`, `production_authorized=false`.
 
 ## Still not checked off
 
-- [ ] Actual self-hosted n8n import -> publication -> webhook execution -> unpublication.
-  The adapter, dedicated stack and opt-in integration test are implemented, but not run.
 - [ ] Production shadow traffic or a deployed real-enterprise creator migration.
 - [ ] Real Jira/Slack/other business effects, end-user SSO/RBAC, or production secrets handling.
 - [ ] User approval and deployment of real generated workflows; the gateway saves inactive drafts.
@@ -100,8 +138,6 @@ and full-exposure checks were added. The final paths above refer to the complete
 
 ## Next step
 
-Run the [dedicated self-hosted instructions](n8n-workflow-use-case.md#run-an-actual-self-hosted-n8n-test)
-on a Docker-capable machine. Begin with four rules-created workflows to validate
-the real engine without inference cost, then combine the live creator with that
-runtime. Only after that should live-sample coverage, held-out tasks and actual
+Scale the live-creator/n8n run beyond six users, configure pricing, and add held-out
+tasks. Only after that should live-sample coverage, held-out tasks and actual
 enterprise connectors be expanded.

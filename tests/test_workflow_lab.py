@@ -197,7 +197,7 @@ def test_n8n_runtime_import_execute_and_unpublish_use_scoped_calls(monkeypatch):
         def __exit__(self, *_): pass
         def post(self, url, json):
             assert "sim-engine-namespace" in url
-            return type("Response", (), {"status_code": 200})()
+            return type("Response", (), {"status_code": 200, "text": ""})()
     monkeypatch.setattr("sim_engine.workflow_lab.runtime.httpx.Client", Client)
     runtime.execute(Spec(), "namespace", "t", event_suite("t")[:1], "candidate")
     assert calls[0][1] == "/workflows"
@@ -264,6 +264,28 @@ def test_workflow_sdg_is_bounded_and_reusable_without_network(tmp_path, monkeypa
     assert len((tmp_path / "sdg.jsonl").read_text().splitlines()) == 4
     with pytest.raises(ValueError, match="budget"):
         paraphrase(generate(4), tmp_path / "over-budget.jsonl", batch_size=1, max_requests=2)
+
+
+def test_n8n_webhook_waits_only_for_unregistered_404(monkeypatch):
+    monkeypatch.setenv("N8N_LAB_API_KEY", "fake-not-real")
+    monkeypatch.setattr("sim_engine.workflow_lab.runtime.time.sleep", lambda _: None)
+    runtime = N8nRuntime(allow_activation=True)
+    def make(statuses):
+        seq = list(statuses)
+        class C:
+            posts = 0
+            def post(self, url, json):
+                C.posts += 1
+                code, text = seq.pop(0)
+                return type("R", (), {"status_code": code, "text": text})()
+        return C()
+    unreg = (404, 'The requested webhook "POST x" is not registered.')
+    c = make([unreg, unreg, (200, "")])
+    assert runtime._post_webhook(c, "ns", {}).status_code == 200 and type(c).posts == 3
+    c = make([(503, "fault")])  # workflow failures are never retried by the adapter
+    assert runtime._post_webhook(c, "ns", {}).status_code == 503 and type(c).posts == 1
+    c = make([(404, "other not found")])
+    assert runtime._post_webhook(c, "ns", {}).status_code == 404 and type(c).posts == 1
 
 
 @pytest.mark.integration

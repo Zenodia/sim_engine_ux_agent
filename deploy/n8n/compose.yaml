@@ -28,7 +28,7 @@ services:
     networks: [lab]
 networks:
   lab:
-    internal: true
+    internal: false
 volumes:
   n8n_data:
   fixture_data:

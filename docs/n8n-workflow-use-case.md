@@ -125,12 +125,32 @@ requires fresh release-bound evidence.
 ## Run an actual self-hosted n8n test
 
 The checked-in Compose stack uses loopback ports **5680** (n8n) and **8091** (fixtures),
-separate named volumes, and an internal network. Its image is pinned to n8n 2.47.7
-unless `N8N_LAB_IMAGE` is set. It does not reuse an existing enterprise instance.
+separate named volumes, and a dedicated bridge network (`internal: false`). Its image
+is pinned to n8n 2.47.7 unless `N8N_LAB_IMAGE` is set. It does not reuse an existing
+enterprise instance.
 
-```powershell
-docker compose -f deploy/n8n/compose.yaml up -d --build
+The network must **not** be `internal: true`: Docker does not forward published host
+ports for services on an internal network, so the editor and fixtures would be
+unreachable from the host. Both ports remain bound to `127.0.0.1` only. If you have an
+older checkout, apply the fix and recreate the containers (named volumes are kept):
+
+```bash
+sed -i 's/internal: true/internal: false/' deploy/n8n/compose.yaml
+docker compose -f deploy/n8n/compose.yaml down
 ```
+
+```bash
+docker compose -f deploy/n8n/compose.yaml up -d --build
+docker compose -f deploy/n8n/compose.yaml ps
+curl -s http://127.0.0.1:5680/healthz   # expect {"status":"ok"}
+```
+
+**Remote machine (for example a Brev instance).** The ports are loopback-only on the
+remote host, so forward the editor port to the machine where your browser runs, e.g.
+`brev port-forward <instance-name> -p 5680:5680`, or use
+`ssh -L 5680:127.0.0.1:5680 -L 8091:127.0.0.1:8091 <user>@<host>`. Only the editor
+needs forwarding for setup; the CLI commands run on the remote host and use
+`127.0.0.1` directly.
 
 Open [the local n8n editor](http://localhost:5680), create the owner account, then create
 an API key under **Settings > n8n API**. Give the dedicated lab key workflow creation,
@@ -144,7 +164,8 @@ N8N_LAB_FIXTURE_INTERNAL_URL=http://fixtures:8091
 N8N_LAB_PUBLISH_ACTION=publish
 ```
 
-The n8n API key is separate from the NVIDIA inference key. For a compatible older
+The key is shown only once; keep `.env` out of version control (it is gitignored). The
+n8n API key is separate from the NVIDIA inference key. For a compatible older
 instance using the legacy endpoints, set `N8N_LAB_PUBLISH_ACTION=activate`; the matching
 deactivation endpoint is selected automatically. The pinned stack uses publish/unpublish.
 

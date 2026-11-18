@@ -1,6 +1,7 @@
 import json
 import os
 import re
+import time
 from pathlib import Path
 from urllib.parse import quote
 
@@ -97,6 +98,22 @@ class N8nRuntime:
         self.created.append(record)
         return record
 
+    def _post_webhook(self, client, namespace: str, body: dict, deadline_s: float = 15.0):
+        """POST to the production webhook, waiting for n8n to register it after publish.
+
+        The publish API returns before the webhook is registered. A 404 whose body says the
+        webhook is not registered means the workflow never ran, so retrying cannot duplicate
+        a business effect. Any other status (including workflow 5xx) is returned unchanged.
+        """
+        url = self.base + "/webhook/sim-engine-" + namespace
+        end = time.monotonic() + deadline_s
+        while True:
+            response = client.post(url, json=body)
+            if response.status_code != 404 or "not registered" not in response.text \
+                    or time.monotonic() >= end:
+                return response
+            time.sleep(0.2)
+
     def execute(self, spec: Spec, namespace: str, tenant: str, events: list[dict], variant: str) -> list[dict]:
         if not self.allow_activation:
             raise ValueError("Actual fixture execution requires --allow-activation on the dedicated lab instance")
@@ -111,8 +128,7 @@ class N8nRuntime:
             record["active"] = True
             with httpx.Client(timeout=30, follow_redirects=False) as client:
                 for delivery, event in enumerate(events):
-                    response = client.post(self.base + "/webhook/sim-engine-" + namespace,
-                        json={"event": event, "delivery_id": str(delivery)})
+                    response = self._post_webhook(client, namespace, {"event": event, "delivery_id": str(delivery)})
                     responses.append({"http_status": response.status_code,
                                       "status": "completed" if response.status_code < 400 else "error"})
         finally:

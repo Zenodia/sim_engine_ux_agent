@@ -2,7 +2,7 @@
 
 Status: implementation in this repository, separate from the service-desk domain.
 See [the completed validation record](n8n-validation.md) for delivered coverage and
-the pending actual self-hosted engine check.
+the actual self-hosted engine check.
 
 ## Objective and boundaries
 
@@ -51,8 +51,7 @@ versioned code compiles that specification into n8n nodes.
 
 ## Validation limits
 
-Docker was not found during discovery. Native JSON/schema validation, reference
-execution, Node.js compiler tests, and mocked REST boundary tests can be exercised
-locally. Real n8n execution must be reported separately and requires starting the
-provided dedicated stack and supplying its API key. The application will not claim
+Real n8n execution was verified on 2026-11-18 for 4 rules-created users (see the
+validation record) and is reported separately from reference execution; it requires
+the provided dedicated stack and its API key. The application will not claim
 production validation from fixture or reference evidence.
