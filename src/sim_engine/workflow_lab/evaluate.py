@@ -13,7 +13,7 @@ from .compiler import artifact_digest, compile_workflow
 from .contracts import Check, CreatorTask, Evidence, Result, Spec
 from .creator import CreatorMemory, author
 from .fixtures import FixtureStore
-from .tasks import event_suite
+from .tasks import event_suite_v2, event_suite_v3
 
 
 def release_identity(backend: str) -> str:
@@ -21,7 +21,7 @@ def release_identity(backend: str) -> str:
     configuration = {"backend": backend, "spec_schema": Spec.model_json_schema(),
                      "compiler": inspect.getsource(compiler), "creator": inspect.getsource(creator),
                      "runtime": inspect.getsource(runtime), "verifier": inspect.getsource(verify_effects),
-                     "events": inspect.getsource(event_suite), "fixtures": inspect.getsource(FixtureStore)}
+                     "events": inspect.getsource(event_suite_v2) + inspect.getsource(event_suite_v3), "fixtures": inspect.getsource(FixtureStore)}
     if backend == "llm":
         from sim_engine.config import llm_settings
         configuration["model_configuration"] = llm_settings().public_metadata()
@@ -42,6 +42,16 @@ def verify_effects(expected: Spec, tenant: str, events: list[dict], snapshot: di
         observed = [effect for effect in effects if effect["kind"] == kind]
         identities = [effect["payload"]["event"]["event_id"] for effect in observed]
         checks.append(Check(name=kind + "_exactly_once", passed=len(identities) == len(wanted) and set(identities) == wanted))
+    # Ordering: for every event the ticket must exist before its notification, and the notification before any escalation.
+    # (Found by mutation testing: the set-based checks above could not see a workflow that notified first.)
+    position = {}
+    for index, effect in enumerate(effects):
+        position.setdefault((effect["kind"], effect["payload"]["event"]["event_id"]), index)
+    sequence = ("tickets", "notifications", "escalations")
+    ordered = all(position[(earlier, identity)] < position[(later, identity)]
+                  for identity in accepted for i, earlier in enumerate(sequence) for later in sequence[i + 1:]
+                  if (earlier, identity) in position and (later, identity) in position)
+    checks.append(Check(name="effect_order", passed=ordered))
     notifications = [e["payload"] for e in effects if e["kind"] == "notifications"]
     checks.extend([
         Check(name="regional_routing", passed=all(p["channel"] ==
@@ -113,7 +123,7 @@ def evaluate(tasks: list[CreatorTask], output: Path, runtime, backend="rules", s
                 workflow_hash = artifact_digest(workflow)
                 dump(folder / "workflow.json", workflow)
                 dump(folder / "previous-workflow.json", compile_workflow(initial, namespace + "-previous", task.tenant, fixture_url, "baseline"))
-                events = event_suite(task.tenant)
+                events = event_suite_v3(task.tenant)
                 responses = runtime.execute(spec, namespace, task.tenant, events, variant)
                 snapshot = runtime.snapshot(namespace)
                 dump(folder / "events-input.json", events)

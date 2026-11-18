@@ -10,7 +10,7 @@ installed version before designing around them.
 
 | # | Direction | Why now | Effort |
 |---|---|---|---|
-| 1 | Close the certification loop (stricter mutants, failure-driven generation) | Directly improves grader quality, the weakest link found so far | Small to medium |
+| 1 | Continue the certification loop (harder mutants, learned exposure map, creator-episode failures) | The first loop already found an oracle gap and three suite gaps | Small to medium |
 | 2 | Run the promotion stages on real n8n, with cost and held-out tasks | Today only offline evidence has run on the real engine | Medium |
 | 3 | Deeper Data Designer use (validators, seeds, rollout ingestion, workflow chaining) | Turns one-off generation into a repeatable pipeline | Medium |
 | 4 | Real connectors, identity and long-running semantics | Needed before any claim beyond fixtures | Large |
@@ -19,20 +19,26 @@ installed version before designing around them.
 
 ## 1. Close the certification loop (builds on use case C)
 
-**Today:** 9 mutants, Data Designer scenarios, a novel-kill acceptance rule, 0 reference/n8n divergences on 411 cells.
+**Done (2026-11-18):** 16 mutants including a realistic title-directive mutant and combination or boundary mutants; an oracle gap found and fixed
+(`effect_order`); fixed suites v2 and v3 that close the blind spots the loop found; seeded dimensions through a Data Designer seed dataset; a kill-rate-by-dimension
+report; failure-driven generation (`harden`) with a classifier, lineage-preserving targeted variants and re-certification on the reference and real n8n
+(32/32 targeted kills, 0 divergences, 0 suspected oracle gaps). Results: [overview](01-overview.md#verified-results).
+
+**Next:**
 
 | Next step | Detail | Evidence of success |
 |---|---|---|
-| Make the title-injection mutant realistic | The current trigger is lexical (the title contains "ignore", a URL or a `"channel"` key) and produces incidental kills. Replace it with a workflow variant that really follows instructions, for example an LLM-backed classification step that can be steered by title text | Kills correlate with genuine injection attempts, not incidental words |
-| Add mutants for what the oracle might miss | Idempotency key reuse with a changed payload, wrong ticket project, notification sent before the ticket, partial-failure ordering, escalation on a below-threshold event | A mutant the oracle cannot kill reveals an oracle gap to fix, which is the point |
-| Fix the legacy suite blind spot | Reorder or relocate the first duplicate so a missing retry is not healed | Legacy `no_retry` kill rate rises from 4/13 |
-| Failure-driven generation | Convert failed episodes (`events.jsonl`, `outcome.json`) into seed rows, classify the failure, and generate targeted variants. Public Data Designer documentation describes ingesting agent rollouts; native n8n logs are not a listed format, so they need conversion to a supported format or a plain seed dataset. Imported traces are not redacted automatically | New accepted scenarios per recurring failure class; certification cost per accepted scenario |
-| Split by lineage | Keep a base task and all its descendants on the same side of train and holdout | No leakage between train and holdout kill rates |
-| Seeded generation and a quota | Make scenario sampling reproducible; obtain a higher build.nvidia.com quota or an enterprise-controlled endpoint | Identical scenario files from the same seed; no 429 stalls |
-| Report on defect classes, not just rates | Keep the kill matrix per mutant and per dimension (fault type, duplicate placement) | Clear statement of which input dimension catches which defect |
+| Learn the exposure map instead of hand-writing it | `harden.EXPOSURE` (which input exposes which defect) is domain knowledge. Derive candidate rules from the per-dimension kill rates the report already computes and compare with the hand map | Learned and hand maps agree, or the differences reveal map errors |
+| Use failed *creator* episodes as a failure source | Today the failures are surviving mutants. Convert failed episodes (`events.jsonl`, `outcome.json`) of the live creator into seed rows and classify them. Public Data Designer documentation describes rollout ingestion; native n8n logs are not a listed format, so they need conversion, and imported traces are not redacted automatically | New accepted scenarios per recurring creator failure class |
+| Harder, independent mutants | Idempotency-key reuse with a changed payload, partial-failure ordering, escalation before notification, state-dependent bugs that only appear after N events, and mutants proposed by a model and then vetted. A mutant the oracle cannot kill reveals an oracle gap, which is the point | New gaps found and fixed, each re-measured |
+| A genuinely instruction-following title mutant | The directive mutant is a regular expression. Replace it with a workflow variant whose routing step is steerable by title text, for example an LLM-backed classification step | Kills correlate with real injection success, not pattern matching |
+| Promote proposals automatically | `harden` already lists, per gap, the events of a killing variant. Merge them into the next fixed suite automatically and re-certify | Fixed suite v4 produced without hand editing |
+| Seeded titles and a quota | Dimensions are reproducible; the LLM titles are not. Obtain a higher build.nvidia.com quota or an enterprise-controlled endpoint and pin titles | Identical scenario files from the same seed; no 429 stalls |
+| Cost per accepted scenario | Configure pricing and report cost per accepted scenario, not only counts | A cost figure instead of `null` |
+| Held-out evaluation of a certified suite | Evaluate certification quality on independent tasks kept out of generation | Kill rates on held-out tasks match development |
 
-Success metrics for this track: defects caught that the legacy suite misses, certification cost per accepted scenario,
-and performance of a certified suite on independent held-out tasks.
+Success metrics for this track: defects caught that earlier suites and the oracle missed, certification cost per accepted scenario, and performance of a
+certified suite on independent held-out tasks.
 
 ## 2. Promotion stages on real n8n, cost and held-out tasks
 

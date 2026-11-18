@@ -86,6 +86,7 @@ def parser():
     scn = sub.add_parser("scenarios-dd", help="Generate hidden test scenarios with NeMo Data Designer")
     scn.add_argument("--count", type=int, default=24)
     scn.add_argument("--no-llm", action="store_true", help="Use deterministic template titles instead of the LLM")
+    scn.add_argument("--seed", type=int, default=42, help="Seed for the scenario dimensions (titles from the LLM are not seeded)")
     scn.add_argument("--out", type=Path, required=True)
     cert = sub.add_parser("certify", help="Mutation-test the verifier on the reference and/or real n8n")
     cert.add_argument("--scenarios", type=Path, required=True)
@@ -93,6 +94,14 @@ def parser():
     cert.add_argument("--allow-activation", action="store_true")
     cert.add_argument("--limit", type=int)
     cert.add_argument("--out", type=Path, required=True)
+    hard = sub.add_parser("harden", help="Failure-driven generation: targeted variants for mutants that survived a certify run")
+    hard.add_argument("--run", type=Path, required=True, help="A finished `certify` output folder")
+    hard.add_argument("--scenarios", type=Path, required=True, help="The scenarios file that run used")
+    hard.add_argument("--per-mutant", type=int, default=3)
+    hard.add_argument("--no-llm", action="store_true")
+    hard.add_argument("--executor", choices=["reference", "n8n", "both"], default="reference")
+    hard.add_argument("--allow-activation", action="store_true")
+    hard.add_argument("--out", type=Path, required=True)
     deploy = sub.add_parser("import-draft")
     deploy.add_argument("--workflow", type=Path, required=True)
     deploy.add_argument("--record-out", type=Path, required=True)
@@ -161,7 +170,7 @@ def main():
                 control.close()
     elif args.command == "scenarios-dd":
         from .scenarios_dd import generate_scenarios, write_scenarios
-        scenarios, stats = generate_scenarios(args.count, use_llm=not args.no_llm)
+        scenarios, stats = generate_scenarios(args.count, use_llm=not args.no_llm, seed=args.seed)
         write_scenarios(args.out, scenarios, stats)
         print(json.dumps(stats, indent=2))
     elif args.command == "certify":
@@ -178,6 +187,18 @@ def main():
         print(json.dumps({"accepted": {k: v for k, v in summary["accepted"].items() if k != "items"},
                           "minimal_cover": summary["minimal_cover"], "title_trigger_by_style": summary["title_trigger_by_style"],
                           "divergences": {k: v for k, v in summary["divergences"].items() if k != "items"}}, indent=2))
+    elif args.command == "harden":
+        from .harden import harden
+        runtimes = []
+        if args.executor in ("reference", "both"):
+            runtimes.append(make_runtime("reference", args.out))
+        if args.executor in ("n8n", "both"):
+            runtimes.append(make_runtime("n8n", args.out, args.allow_activation))
+        result = harden(args.run, args.scenarios, runtimes, args.out, args.per_mutant, use_llm=not args.no_llm)
+        print(json.dumps({k: v for k, v in result.items() if k not in ("targets", "proposed_events_for_fixed_suite")}, indent=2))
+        for mutant, t in result["targets"].items():
+            print(f"{mutant:22} random {t['random_before']['kill_rate']} (exercised {t['random_before']['exercised']:.0%})  targeted {t['targeted_kill_rate']} ({t['killed']}/{t['variants']})  "
+                  f"causes {t['causes_before']}  suspected oracle gaps {t['suspected_oracle_gaps'] or '-'}")
     elif args.command == "fixtures":
         serve_fixtures(args.db, args.host, args.port)
     elif args.command == "control":

@@ -9,7 +9,7 @@ import httpx
 
 from sim_engine.config import load_environment
 
-from .compiler import TITLE_SINK_CHANNEL, TITLE_TRIGGER_PATTERN, compile_workflow
+from .compiler import TITLE_DIRECTIVE_PATTERN, compile_workflow
 from .contracts import Spec
 from .fixtures import FixtureStore
 
@@ -32,22 +32,26 @@ class ReferenceRuntime:
             if ((e.get("tenant") != tenant and mutation != "no_tenant_check") or not isinstance(e.get("event_id"), str) or
                     not re.fullmatch(r"[A-Za-z0-9_-]{1,100}", e["event_id"]) or e.get("severity") not in levels or
                     e.get("region") not in ("EU", "US") or not isinstance(e.get("title"), str) or
-                    len(e["title"]) > 1000 or not isinstance(e.get("service"), str) or not isinstance(e.get("acknowledged"), bool)):
+                    len(e["title"]) > (200 if mutation == "title_limit_200" else 1000) or not isinstance(e.get("service"), str) or not isinstance(e.get("acknowledged"), bool)):
                 responses.append({"status": "rejected"}); continue
-            if levels.index(e["severity"]) < levels.index(spec.minimum_severity):
+            if levels.index(e["severity"]) < levels.index(spec.minimum_severity) + (1 if mutation == "eu_threshold_up" and e["region"] == "EU" else 0):
                 responses.append({"status": "filtered"}); continue
             event = {k: e[k] for k in ("event_id", "tenant", "severity", "region", "title", "service", "acknowledged")}
             event["tenant"] = tenant  # the compiled Code node binds the configured tenant
             if not spec.minimize_personal_data:
                 event = dict(e)
+            route = spec.eu_channel if e["region"] == "EU" else spec.default_channel
+            directive = re.search(TITLE_DIRECTIVE_PATTERN, e["title"], re.I) if mutation == "title_routes" else None
+            key = e["event_id"] if mutation != "key_collision" else f'{e["severity"]}:{e["region"]}'
             body = {"namespace": namespace, "tenant": tenant, "event": event, "project": spec.project,
-                    "channel": TITLE_SINK_CHANNEL if mutation == "title_routes" and re.search(TITLE_TRIGGER_PATTERN, e["title"], re.I)
-                    else (spec.eu_channel if e["region"] == "EU" else spec.default_channel),
-                    "effect_key": e["event_id"] + ("" if spec.deduplicate and variant != "baseline" else f":{delivery}"),
-                    "escalate": e["severity"] == "critical" and
-                                (not spec.acknowledgement_before_escalation or e["acknowledged"])}
+                    "channel": directive.group(1) if directive else route,
+                    "effect_key": key + ("" if spec.deduplicate and variant != "baseline" else f":{delivery}"),
+                    "escalate": (e["severity"] == "critical" or (mutation == "escalate_high" and e["severity"] == "high")) and
+                                (not spec.acknowledgement_before_escalation or e["acknowledged"] or
+                                 (mutation == "us_ack_ignored" and e["region"] == "US"))}
             status = 200
-            for kind in ("tickets", "notifications", "escalations"):
+            for kind in (("notifications", "tickets", "escalations") if mutation == "notify_first" else
+                         ("tickets", "notifications", "escalations")):
                 if kind == "escalations" and not body["escalate"]:
                     continue
                 status, response = self.store.apply(kind, body)
