@@ -5,6 +5,11 @@ conda-backed Python **3.12.7** `.venv`. This is a coverage record for the origin
 simulation/evaluation/migration proposal. Checked items mean demonstrated in the
 fictional local use case, not validated against real enterprise users or production.
 
+This snapshot describes the first service-desk run. The subsequently implemented
+[n8n workflow-creation domain](n8n-workflow-use-case.md) has a separate executor and
+migration controller; its additional capabilities do not retroactively change what
+was checked in the first run.
+
 ## Successful run snapshot
 
 These results are recorded in versionable documentation so they remain visible after cloning once committed.
@@ -99,7 +104,8 @@ See [local verification](local-verification.md) for fixes and local artifact pat
 - [ ] A real percentage-based enterprise gateway rollout or a multi-step exposure ramp.
 - [ ] Recovery of real external actions, production database writes, or active workflows.
 - [ ] Production retention/redaction/access-control enforcement for real user telemetry.
-- [ ] The proposed n8n workflow-creation domain, which remains deferred as requested.
+- [ ] The n8n workflow-creation domain was not part of this first run. It was later
+  implemented separately; see its [runbook](n8n-workflow-use-case.md).
 
 ## Recommended next work, in order
 
